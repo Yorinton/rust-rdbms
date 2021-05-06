@@ -39,4 +39,21 @@ pub mod back_of_house {
             }
         }
     }
+
+    pub enum Language {
+        Japanese,
+        English,
+    }
+
+    use std::str::FromStr;
+    impl FromStr for Language {
+        type Err = ();
+        fn from_str(lang: &str) -> Result<Self, Self::Err> {
+            match lang {
+                "ja" => Ok(Language::Japanese),
+                "en" => Ok(Language::English),
+                _ => Err(())
+            }
+        }
+    }
 }

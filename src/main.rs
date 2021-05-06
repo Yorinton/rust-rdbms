@@ -22,7 +22,7 @@ use std::cmp::{PartialOrd};
 mod lib;
 // 絶対パス：呼び出し側と定義側が独立して移動する可能性が高いならこっち
 use crate::lib::traits::Summary;
-use crate::lib::back_of_house::BreakFast;
+use crate::lib::back_of_house::{BreakFast, Language};
 // 相対パス：呼び出し側と定義側を一緒に移動する可能性が高いならこっち
 // use lib::traits::Summary;
 
@@ -41,6 +41,14 @@ fn en(val: MyEnum) -> () {
 }
 
 fn main() {
+    let lang = "ja";
+    use std::str::FromStr;
+    let langage_code = Language::from_str(lang);
+    match langage_code.unwrap() {
+        Language::Japanese => println!("{}", "日本語！"),
+        Language::English => println!("{}", "英語！"),
+    }
+
     let toast = "france";
     let mut bf = BreakFast::summer(toast);
     // bf自体がmutableであり、toastプロパティはpublicなので変更可能
