@@ -41,6 +41,14 @@ fn en(val: MyEnum) -> () {
 }
 
 fn main() {
+    // 関数をimportする際はuseでモジュールだけimportする
+    // 使う時はモジュール::関数()のようにして使う
+    // こうすることで、localで定義した関数なのかモジュールからimportした関数なのか明確になる
+    // このやり方がRustの慣習
+    use crate::lib::back_of_house;
+    #[allow(unused_variables)]
+    let val = back_of_house::sample_function();
+
     let lang = "ja";
     use std::str::FromStr;
     let langage_code = Language::from_str(lang);

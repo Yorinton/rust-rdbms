@@ -56,4 +56,8 @@ pub mod back_of_house {
             }
         }
     }
+
+    pub fn sample_function() -> u32 {
+        239
+    }
 }
