@@ -44,6 +44,7 @@ fn main() {
     let lang = "ja";
     use std::str::FromStr;
     let langage_code = Language::from_str(lang);
+    // @TODO unwrapを使ったらErrの場合にpanicになるので良くない
     match langage_code.unwrap() {
         Language::Japanese => println!("{}", "日本語！"),
         Language::English => println!("{}", "英語！"),
