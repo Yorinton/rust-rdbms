@@ -22,9 +22,11 @@ use std::cmp::{PartialOrd};
 mod lib;
 // 絶対パス：呼び出し側と定義側が独立して移動する可能性が高いならこっち
 use crate::lib::traits::Summary;
-use crate::lib::back_of_house::{BreakFast, Language};
 // 相対パス：呼び出し側と定義側を一緒に移動する可能性が高いならこっち
 // use lib::traits::Summary;
+
+// 構造体やenumをimportする時は関数とは違いフルパスで書くのが慣習
+use crate::lib::back_of_house::{BreakFast, Language};
 
 enum MyEnum {
     Variant1,
