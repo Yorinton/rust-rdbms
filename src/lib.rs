@@ -23,3 +23,20 @@ impl Summary for Tweet {
         &self.text[..]
     }
 }
+
+pub mod back_of_house {
+    pub struct BreakFast {
+        pub toast: String,
+        #[allow(dead_code)]
+        seasonal_fruit: String,
+    }
+
+    impl BreakFast {
+        pub fn summer(toast: &str) -> BreakFast {
+            BreakFast {
+                toast: String::from(toast),
+                seasonal_fruit: String::from("apple")
+            }
+        }
+    }
+}

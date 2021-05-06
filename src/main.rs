@@ -22,6 +22,7 @@ use std::cmp::{PartialOrd};
 mod lib;
 // 絶対パス：呼び出し側と定義側が独立して移動する可能性が高いならこっち
 use crate::lib::traits::Summary;
+use crate::lib::back_of_house::BreakFast;
 // 相対パス：呼び出し側と定義側を一緒に移動する可能性が高いならこっち
 // use lib::traits::Summary;
 
@@ -40,6 +41,13 @@ fn en(val: MyEnum) -> () {
 }
 
 fn main() {
+    let toast = "france";
+    let mut bf = BreakFast::summer(toast);
+    // bf自体がmutableであり、toastプロパティはpublicなので変更可能
+    bf.toast = String::from("chocolate");
+    // bf自体がmutableだけど、seasonal_fruitはprivateなので参照も修正も出来ずコンパイルエラーになる
+    // bf.seasonal_fruit = String::from("peach");
+
     let localhost_v4 = IpAddr::V4(Ipv4Addr::new(127, 0, 0, 1));
     let localhost_v6 = IpAddr::V6(Ipv6Addr::new(0, 0, 0, 0, 0, 0, 0, 1));
     println!("{}", localhost_v4);
