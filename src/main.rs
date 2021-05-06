@@ -28,8 +28,9 @@ use std::fmt::Result;
 // io::Result、fmt::Resultのように使う
 #[allow(unused_imports)]
 use std::io;
+// asを使ってエイリアスを設定することも可能
 #[allow(unused_imports)]
-use std::fmt;
+use std::fmt as FmtResult;
 
 
 // トレイトをmodでimportしないと、構造体がトレイトを実装していても「実装されてない」というエラーが出てしまう
