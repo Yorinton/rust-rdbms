@@ -1,5 +1,6 @@
 use std::fs::OpenOptions;
 use std::fs::File;
+use std::io::SeekFrom;
 
 pub struct DiskManager {
     // ヒープファイルのファイルディスクリプタ
@@ -7,6 +8,10 @@ pub struct DiskManager {
     // 採番するページIDを決めるカウンタ
     next_page_id: u64, // 符号なし64bit整数型
 }
+
+// page_idはほぼ整数値だが、page_id同士の演算など無意味な処理を静的型チェックで検出するためあえて独自定義型を使う
+// Rustではnew typeパターンと言う※以下はnewtypeイデオム
+pub struct PageId(pub u64);
 
 // 引数の&mut selfはレシーバ = this
 // レシーバが存在するメソッドはインスタンスメソッド
@@ -46,16 +51,30 @@ impl DiskManager {
 
     // 新しいページIDを採番する
     pub fn allocate_page(&mut self) -> PageId {
-
+        // 「self」はthis的な意味合い
+        let page_id = self.next_page_id;
+        self.next_page_id += 1;
+        // PageId型を返却(returnを省略※「;」は書かない)
+        PageId(page_id)
     }
 
     // ページのデータを読み出す
     pub fn read_page_data(&mut self, page_id:PageId, data:&mut [u8]) -> io::Result<()> { // 戻り値型はvoid
-
+        let offset = PAGE_SIZE as u64 * page_id.to_u64();
+        self.heap_file.seek(SeekFrom::Start(offset))?;
+        // 読み出したデータをdata引数に書き込む
+        self.heap_file.read_exact(data)
     }
 
     // データをページに書き出す
     pub fn write_page_data(&mut self, page_id:PageId, data:&[u8]) -> io::Result<()> {
-
+        // オブセットを計算
+        // 現在のpage_idにページサイズをかけることでファイル内のオフセットが分かる
+        let offset = PAGE_SIZE as u64 * page_id.to_u64();
+        // ページ先頭へシーク
+        // SeekFrom::Start(offset)は「ファイルの先頭から数えてoffsetバイト目」と言う意味
+        self.heap_file.seek(SeekFrom::Start(offset))?;
+        // データを書き込む
+        self.heap_file.write_all(data);
     }
 }
