@@ -18,6 +18,20 @@ use std::any::{type_name};
 use std::ops::Add;
 use std::cmp::{PartialOrd};
 
+// 異なるモジュールから同名の要素(structなど)をimportすることは出来ない
+// RustがどちらのResultを使っているか分からないから
+/*
+use std::io::Result;
+use std::fmt::Result;
+*/
+// 以下のようにimportして、
+// io::Result、fmt::Resultのように使う
+#[allow(unused_imports)]
+use std::io;
+#[allow(unused_imports)]
+use std::fmt;
+
+
 // トレイトをmodでimportしないと、構造体がトレイトを実装していても「実装されてない」というエラーが出てしまう
 mod lib;
 // 絶対パス：呼び出し側と定義側が独立して移動する可能性が高いならこっち
