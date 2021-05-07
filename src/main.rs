@@ -75,8 +75,8 @@ fn foo<R: Rng + ?Sized>(rng: &mut R) -> f32 {
     rng.gen()
 }
 
+#[allow(unused_variables)]
 fn main() {
-
     let mut rng = thread_rng();
     let rng_value = foo(&mut rng);
     println!("{}", &rng_value);
@@ -85,7 +85,6 @@ fn main() {
     // 使う時はモジュール::関数()のようにして使う
     // こうすることで、localで定義した関数なのかモジュールからimportした関数なのか明確になる
     // このやり方がRustの慣習
-    #[allow(unused_variables)]
     let val = back_of_house::sample_function();
 
     let lang = "ja";
@@ -301,7 +300,6 @@ fn main() {
     // コンパイル時にサイズは決まっておらず、ヒープ領域に保持される
     // 生成方法new()かvec![](マクロ)
     // 生成時に値が空の場合は型注釈必須
-    #[allow(unused_variables)]
     let v_new: Vec<String> = Vec::new();
     let mut v_macro = vec![1,12,15]; // 初期値のあるVec<T>を生成する方が一般的
     v_macro.push(24); // 末尾に追加
@@ -311,7 +309,6 @@ fn main() {
     println!("{:?}", &v_macro); // [15, 12]
 
     // Vec<T>の要素を読む
-    #[allow(unused_variables)]
     let first = &v_macro[0]; // 要素が存在しないインデックスにアクセスしようとした場合panic
     let first_get: Option<&i32> = v_macro.get(21); // 要素が存在しないインデックスにアクセスしようとした場合Noneが返る
     match first_get {
@@ -362,12 +359,22 @@ fn main() {
         Float(f32),
         Text(String),
     }
-    #[allow(unused_variables)]
     let row = vec![
         SpreadssheetCell::Int(21),
         SpreadssheetCell::Float(4.4),
         SpreadssheetCell::Text(String::from("hello")),
     ];
+
+    // 配列 = 要素数が固定 = 各要素がメモリに格納され、開始点への「ポインタ」「長さ」「キャパシティ」をarrに持つ
+    let arr: [u32; 3] = [22,33,44];
+    // 配列の一部or全部への参照
+    let slice: &[u32] = &arr[1..2];
+    // String = ヒープ領域に文字列が格納され、そのメモリへの「ポインタ」、「長さ」、「キャパシティ」をstring_valが持つ
+    let string_val: String = String::from("aaaa");
+    // &str = Stringの一部or全部の参照(&Stringの場合も&strの型注釈を付けれるっぽい)
+    let str_val: &str = &string_val;
+    let str_val_part: &str = &string_val[1..2];
+    let str_literal: &str = "aaaa";
 }
 
 // Summaryトレイトを実装したインスタンス(の参照)のみ受け付ける
