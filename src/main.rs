@@ -355,6 +355,19 @@ fn main() {
         *item = 19;
         println!("{}", item);
     }
+
+    // 異なる型のコレクションを保持したい場合はenumを使う
+    enum SpreadssheetCell {
+        Int(i32),
+        Float(f32),
+        Text(String),
+    }
+    #[allow(unused_variables)]
+    let row = vec![
+        SpreadssheetCell::Int(21),
+        SpreadssheetCell::Float(4.4),
+        SpreadssheetCell::Text(String::from("hello")),
+    ];
 }
 
 // Summaryトレイトを実装したインスタンス(の参照)のみ受け付ける
