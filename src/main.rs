@@ -309,6 +309,15 @@ fn main() {
     v_macro.remove(0); // 指定したインデックスを削除
     v_macro.reverse(); // 順番を逆にする
     println!("{:?}", &v_macro); // [15, 12]
+
+    // Vec<T>の要素を読む
+    #[allow(unused_variables)]
+    let first = &v_macro[0]; // 要素が存在しないインデックスにアクセスしようとした場合panic
+    let first_get: Option<&i32> = v_macro.get(21); // 要素が存在しないインデックスにアクセスしようとした場合Noneが返る
+    match first_get {
+        Some(&ele) => println!("get {:?}", &ele),
+        None => println!("{}", "No element"),
+    }
 }
 
 // Summaryトレイトを実装したインスタンス(の参照)のみ受け付ける
