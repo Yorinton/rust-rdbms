@@ -418,6 +418,14 @@ fn main() {
     // format!マクロはprintln!とほぼ一緒だが、画面に出力する代わりにフォーマットした文字列を返す
     let pen_pinappo_apple_pen = format!("{}-{}-{}-{}", pen, pinappo, apple, pen);
     println!("{}", pen_pinappo_apple_pen);
+
+    // Stringへの添字アクセスはコンパイルに失敗する
+    // StringはVec<u8>のラッパー
+    // Stringに添字アクセスした場合、該当のindexが表すのはu8の値(バイトスライスの要素の1つ)
+    // 添字でアクセスしたデータが文字として意味のある単位になっていないこともある
+    // またStringの添字の場合、処理がO(1)になることを保証できない
+    // 文字として意味のある単位かどうかを探すために、最初の要素から走査していく必要があるから
+    // let part = &pinappo[2]; // `String` cannot be indexed by `{integer}`
 }
 
 // Summaryトレイトを実装したインスタンス(の参照)のみ受け付ける
