@@ -295,6 +295,20 @@ fn main() {
     b = &c;
     println!("second:{}", b);
     println!("third:{}", a);
+
+    // Vec<T>
+    // Vec<T>は同じ型の値のコレクション
+    // コンパイル時にサイズは決まっておらず、ヒープ領域に保持される
+    // 生成方法new()かvec![](マクロ)
+    // 生成時に値が空の場合は型注釈必須
+    #[allow(unused_variables)]
+    let v_new: Vec<String> = Vec::new();
+    let mut v_macro = vec![1,12,15]; // 初期値のあるVec<T>を生成する方が一般的
+    v_macro.push(24); // 末尾に追加
+    v_macro.pop(); // 末尾から取り除く
+    v_macro.remove(0); // 指定したインデックスを削除
+    v_macro.reverse(); // 順番を逆にする
+    println!("{:?}", &v_macro); // [15, 12]
 }
 
 // Summaryトレイトを実装したインスタンス(の参照)のみ受け付ける
