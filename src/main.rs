@@ -40,15 +40,18 @@ use std::fmt as FmtResult;
 #[allow(unused_imports)]
 use std::fs::*;
 
-// トレイトをmodでimportしないと、構造体がトレイトを実装していても「実装されてない」というエラーが出てしまう
-mod lib;
-// 絶対パス：呼び出し側と定義側が独立して移動する可能性が高いならこっち
-use crate::lib::traits::Summary;
+// src直下のファイル名(拡張子抜き)をモジュール名としてimportできる
+mod summary;
+mod back_of_house;
+// mod xxxxでモジュールをimportして、useでモジュール内の要素(structやenumなど)をimportできる
+use summary::{Tweet, Summary};
+use back_of_house::{BreakFast, Language};
+
 // 相対パス：呼び出し側と定義側を一緒に移動する可能性が高いならこっち
 // use lib::traits::Summary;
 
 // 構造体やenumをimportする時は関数とは違いフルパスで書くのが慣習
-use crate::lib::back_of_house::{BreakFast, Language};
+// use lib::back_of_house::{BreakFast, Language};
 
 enum MyEnum {
     Variant1,
@@ -82,7 +85,6 @@ fn main() {
     // 使う時はモジュール::関数()のようにして使う
     // こうすることで、localで定義した関数なのかモジュールからimportした関数なのか明確になる
     // このやり方がRustの慣習
-    use crate::lib::back_of_house;
     #[allow(unused_variables)]
     let val = back_of_house::sample_function();
 
@@ -263,7 +265,7 @@ fn main() {
     // };
     // println!("{}", sample_a.add());
 
-    let tweet = lib::Tweet {
+    let tweet = Tweet {
         author: String::from("Katsu"),
         text: String::from("I'm very happy! Yeah!"),
     };
@@ -317,7 +319,7 @@ fn notify_where<T>(item: &T)
 // 戻り値に特定のトレイトを実装した型を指定
 #[allow(dead_code)]
 fn return_summarize() -> impl Summary {
-    lib::Tweet {
+    Tweet {
         author: String::from("Katsu"),
         text: String::from("I am implemented Summary"),
     }
