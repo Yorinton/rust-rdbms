@@ -318,6 +318,17 @@ fn main() {
         Some(&ele) => println!("get {:?}", &ele),
         None => println!("{}", "No element"),
     }
+
+    // Vec<T>の要素の型がスタックに保持されるような型の場合
+    let mut v_borrow = vec![9, 22, 42, 500];
+    // v_borrow[1]の値がsecondにコピーされる(Vec<T>の要素がi32で、スタックに保持されるため)
+    // secondとv_borrow[1]はそれぞれスタックの別々のアドレスに保持されている
+    let second = v_borrow[1];
+    // v_borrowの値を書き換えてもsecondの値は書き換わらない
+    v_borrow[1] = 100;
+    // 以下の2つは異なるアドレスを指す
+    println!("{:p}", &v_borrow[1]);
+    println!("{:p}", &second);
 }
 
 // Summaryトレイトを実装したインスタンス(の参照)のみ受け付ける
