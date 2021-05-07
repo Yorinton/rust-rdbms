@@ -33,6 +33,13 @@ use std::io::{self, Seek}; // std::ioとstd::io::Seekをこのスコープに取
 #[allow(unused_imports)]
 use std::fmt as FmtResult;
 
+// globパターン
+// パッケージの全ての公開要素を取り込む
+// 該当の要素がlocalで定義されたものか、useで外部から取り込んだものか分かりづらくなる
+// テストで使うことが多い
+#[allow(unused_imports)]
+use std::fs::*;
+
 // トレイトをmodでimportしないと、構造体がトレイトを実装していても「実装されてない」というエラーが出てしまう
 mod lib;
 // 絶対パス：呼び出し側と定義側が独立して移動する可能性が高いならこっち
