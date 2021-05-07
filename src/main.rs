@@ -390,6 +390,16 @@ fn main() {
     let alpha = String::from("a");
     let bytes_alpha = alpha.as_bytes();
     println!("{:?}", bytes_alpha); // [97]
+
+    // 文字列連結
+    let mut str_base = String::from("base");
+    let str_pushed_literal = " and pushed";
+    let str_pushed_real = String::from(" and pushed");
+    // push_strは引数にStringではなく&strを渡すため、引数に指定した変数の所有権を奪わない(借用するだけ)
+    str_base.push_str(&str_pushed_real);
+    // push_strに渡した後も参照できる
+    println!("{}", &str_pushed_real);
+    println!("{}", &str_base);
 }
 
 // Summaryトレイトを実装したインスタンス(の参照)のみ受け付ける
