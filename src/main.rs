@@ -329,6 +329,18 @@ fn main() {
     // 以下の2つは異なるアドレスを指す
     println!("{:p}", &v_borrow[1]);
     println!("{:p}", &second);
+
+    let mut v_string = vec![String::from("h"), String::from("a"), String::from("c"), String::from("k")];
+    let first_st = &mut v_string[2];
+    // v_string[2]のデータはfirst_stに借用中なので変更できない
+    // 通常、mutableで借用すれば可変なはずだが、
+    // Vec<T>の場合、変更の際に連続したメモリ領域を確保できなかった場合に別の領域を確保し直し、
+    // 全く別のアドレスになってしまう可能性があるから
+    // その場合、first_stはダングリングポインタになってしまう
+    // ↓ そのため、これらはコンパイルエラーになる
+    // v_string.push(String::from("ccc"));
+    // v_string[2] = String::from("bb");
+    println!("{}", first_st);
 }
 
 // Summaryトレイトを実装したインスタンス(の参照)のみ受け付ける
