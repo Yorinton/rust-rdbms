@@ -367,11 +367,11 @@ fn main() {
 
     // 配列 = 要素数が固定 = 各要素がメモリに格納され、開始点への「ポインタ」「長さ」「キャパシティ」をarrに持つ
     let arr: [u32; 3] = [22,33,44];
-    // 配列の一部or全部への参照
+    // 配列の一部or全部への参照 = 開始点のポインタと長さを持つ
     let slice: &[u32] = &arr[1..2];
     // String = ヒープ領域に文字列が格納され、そのメモリへの「ポインタ」、「長さ」、「キャパシティ」をstring_valが持つ
     let string_val: String = String::from("aaaa");
-    // &str = Stringの一部or全部の参照(&Stringの場合も&strの型注釈を付けれるっぽい)
+    // &str = Stringの一部or全部の参照(&Stringの場合も&strの型注釈を付けれるっぽい) = 開始点のポインタと長さを持つ
     let str_val: &str = &string_val;
     let str_val_part: &str = &string_val[1..2];
     let str_literal: &str = "aaaa";
