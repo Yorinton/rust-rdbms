@@ -385,6 +385,11 @@ fn main() {
     // [227,129,130]がバイトスライス
     let bytes_hira = hira.as_bytes();
     println!("{:?}", bytes_hira);
+
+    // ASCII文字の場合は直接10進数表現と対応している
+    let alpha = String::from("a");
+    let bytes_alpha = alpha.as_bytes();
+    println!("{:?}", bytes_alpha); // [97]
 }
 
 // Summaryトレイトを実装したインスタンス(の参照)のみ受け付ける
