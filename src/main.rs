@@ -32,7 +32,6 @@ use std::io;
 #[allow(unused_imports)]
 use std::fmt as FmtResult;
 
-
 // トレイトをmodでimportしないと、構造体がトレイトを実装していても「実装されてない」というエラーが出てしまう
 mod lib;
 // 絶対パス：呼び出し側と定義側が独立して移動する可能性が高いならこっち
@@ -57,7 +56,20 @@ fn en(val: MyEnum) -> () {
     }
 }
 
+// 外部パッケージをuse
+// cargo add randでCargo.tomlに追加した上でuse
+// cargo build か cargo runでrandも一緒にコンパイルされる
+use rand::{thread_rng, Rng};
+fn foo<R: Rng + ?Sized>(rng: &mut R) -> f32 {
+    rng.gen()
+}
+
 fn main() {
+
+    let mut rng = thread_rng();
+    let rng_value = foo(&mut rng);
+    println!("{}", &rng_value);
+
     // 関数をimportする際はuseでモジュールだけimportする
     // 使う時はモジュール::関数()のようにして使う
     // こうすることで、localで定義した関数なのかモジュールからimportした関数なのか明確になる
