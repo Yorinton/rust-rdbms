@@ -410,6 +410,14 @@ fn main() {
     // 処理の内容としては、s11の所有権を奪い、その後に続けてs22の中身のデータをコピーして、出来上がったデータの所有権を返している
     // 2つ目の文字列の参照は&Stringのはずだが、Rustのコンパイラが「参照外し型強制」を行い、&Stringを&strに変換している
     let s33 = s11 + &s22; // s1はムーブされ、もう使用できないことに注意
+
+    // 文字列のフォーマット
+    let pen = String::from("pen");
+    let apple = String::from("apple");
+    let pinappo = String::from("pinappo");
+    // format!マクロはprintln!とほぼ一緒だが、画面に出力する代わりにフォーマットした文字列を返す
+    let pen_pinappo_apple_pen = format!("{}-{}-{}-{}", pen, pinappo, apple, pen);
+    println!("{}", pen_pinappo_apple_pen);
 }
 
 // Summaryトレイトを実装したインスタンス(の参照)のみ受け付ける
