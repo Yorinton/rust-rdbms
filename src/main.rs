@@ -426,6 +426,11 @@ fn main() {
     // またStringの添字の場合、処理がO(1)になることを保証できない
     // 文字として意味のある単位かどうかを探すために、最初の要素から走査していく必要があるから
     // let part = &pinappo[2]; // `String` cannot be indexed by `{integer}`
+
+    // 範囲を指定して文字列スライスを作成する場合、
+    // 指定した範囲が文字の単位からずれていた場合パニックになる
+    let moji = "文字";
+    let part = &moji[..5]; // 'byte index 5 is not a char boundary; it is inside '字' (bytes 3..6) of `文字`'
 }
 
 // Summaryトレイトを実装したインスタンス(の参照)のみ受け付ける
