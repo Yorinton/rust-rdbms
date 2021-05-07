@@ -429,8 +429,28 @@ fn main() {
 
     // 範囲を指定して文字列スライスを作成する場合、
     // 指定した範囲が文字の単位からずれていた場合パニックになる
-    let moji = "文字";
-    let part = &moji[..5]; // 'byte index 5 is not a char boundary; it is inside '字' (bytes 3..6) of `文字`'
+    let moji = "文字列はバイト値、スカラー値、書記素クラスタで表現できる";
+    // let part = &moji[..5]; // 'byte index 5 is not a char boundary; it is inside '字' (bytes 3..6) of `文字`'
+
+    // 文字列を走査するメソッド
+    // char型(スカラー値)を取得
+    let mut char_arr: Vec<char> = vec![];
+    for item in moji.chars() {
+        // 日本語が1文字ずつchar_arrに入る
+        // ただUnicodeスカラー値には2バイト以上から成るものもあるため、
+        // 綺麗に意図通りに書記素が取得できるとは限らない
+        // 標準ライブラリにはないのでクレートを探す必要がある
+        char_arr.push(item);
+    }
+    println!("{:?}", &char_arr);
+
+    // バイト値(u8 = 8bit = 1byte)
+    let mut byte_arr: Vec<u8> = vec![];
+    for item in moji.bytes() {
+        byte_arr.push(item);
+    }
+    // バイト(10進数)配列
+    println!("{:?}", &byte_arr);
 }
 
 // Summaryトレイトを実装したインスタンス(の参照)のみ受け付ける
