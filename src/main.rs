@@ -370,11 +370,21 @@ fn main() {
     // 配列の一部or全部への参照 = 開始点のポインタと長さを持つ
     let slice: &[u32] = &arr[1..2];
     // String = ヒープ領域に文字列が格納され、そのメモリへの「ポインタ」、「長さ」、「キャパシティ」をstring_valが持つ
+    // String型は伸長可能、可変、所有権を持つ
+    // Stringも&strもUTFエンコードされたデータが入る
     let string_val: String = String::from("aaaa");
     // &str = Stringの一部or全部の参照(&Stringの場合も&strの型注釈を付けれるっぽい) = 開始点のポインタと長さを持つ
     let str_val: &str = &string_val;
     let str_val_part: &str = &string_val[1..2];
     let str_literal: &str = "aaaa";
+
+    let hira = String::from("あ");
+    // 文字列をバイトスライスに変換
+    // "あ" => UTF-8エンコード => E3,81,82(16進数)
+    // E3,81,82 => 16進数から10進数に変換 => 227,129,130
+    // [227,129,130]がバイトスライス
+    let bytes_hira = hira.as_bytes();
+    println!("{:?}", bytes_hira);
 }
 
 // Summaryトレイトを実装したインスタンス(の参照)のみ受け付ける
