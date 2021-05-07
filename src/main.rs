@@ -27,7 +27,8 @@ use std::fmt::Result;
 // 以下のようにimportして、
 // io::Result、fmt::Resultのように使う
 #[allow(unused_imports)]
-use std::io;
+use std::io::{self, Seek}; // std::ioとstd::io::Seekをこのスコープに取り込みたい場合の書き方(selfを使う)
+
 // asを使ってエイリアスを設定することも可能
 #[allow(unused_imports)]
 use std::fmt as FmtResult;
