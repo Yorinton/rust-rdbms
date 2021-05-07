@@ -341,6 +341,20 @@ fn main() {
     // v_string.push(String::from("ccc"));
     // v_string[2] = String::from("bb");
     println!("{}", first_st);
+
+    // for in 文で内部の要素を走査出来る
+    let v_for = vec![40, 22, 499, 211];
+    // itemは不変な参照
+    for item in &v_for {
+        println!("{}", item);
+    }
+
+    let mut v_for_mut = vec![40, 22, 499, 211];
+    // itemは可変な参照
+    for item in &mut v_for_mut {
+        *item = 19;
+        println!("{}", item);
+    }
 }
 
 // Summaryトレイトを実装したインスタンス(の参照)のみ受け付ける
