@@ -504,6 +504,16 @@ fn main() {
     scores.entry(String::from("Yellow")).or_insert(50); // .entryは新しい値への可変参照を返す
     scores.entry(String::from("Blue")).or_insert(50); // .entryは既存の値への可変参照を返す
     println!("{:?}", scores); // {"Yellow": 50, "Blue": 10}
+
+    let text = "Hello everyone. Please be quiet! Please! Please!";
+    let mut map: HashMap<&str, u32> = HashMap::new();
+    for word in text.split_whitespace() {
+        // キーwordに対応する値への可変参照をcountに保持
+        let count = map.entry(word).or_insert(0);
+        // countの参照先の値をインクリメント
+        *count += 1;
+    }
+    println!("{:?}", map);
 }
 
 // Summaryトレイトを実装したインスタンス(の参照)のみ受け付ける
