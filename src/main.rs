@@ -561,12 +561,11 @@ fn main() {
     // ピッグ・ラテン
     let a = "penpen";
     let b = "apple";
-    println!("{:?}", pig_latin_single_byte(&a));
-    println!("{:?}", pig_latin_single_byte(&b));
-
+    println!("{:?}", pig_latin_ascii(&a));
+    println!("{:?}", pig_latin_ascii(&b));
 }
 
-fn pig_latin_single_byte(text: &str) -> String {    
+fn pig_latin_ascii(text: &str) -> String {
     let mut ret = text.to_string();
     // .collect()でVec<T>を生成
     let vec_char: Vec<char> = ret.chars().collect();
