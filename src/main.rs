@@ -451,6 +451,22 @@ fn main() {
     }
     // バイト(10進数)配列
     println!("{:?}", &byte_arr);
+
+    use std::collections::HashMap;
+    // HashMapのキー、値はそれぞれ全て同じ型でなければならない
+    // Vec同様に値はヒープに保持される
+    let mut hash: HashMap<String, i32> = HashMap::new();
+    hash.insert(String::from("sha"), 256);
+    hash.insert(String::from("RSA"), 4096);
+
+    // 2つのベクタの要素をそれぞれキーと値にしてHashMapを生成する
+    let teams = vec![String::from("Blue"), String::from("Red")];
+    let initial_scores = vec![98, 74];
+    // .zipで２つのベクタからタプルのベクタを生成[("Blue", 98), ("Red", 74)]
+    // .collectでHashMapを生成
+    // 型注釈の<_,_>の型はコンパイル時にベクタの値の型からコンパイルが型推論する
+    let scores: HashMap<_,_> = teams.iter().zip(initial_scores.iter()).collect();
+    println!("{:?}", &scores);
 }
 
 // Summaryトレイトを実装したインスタンス(の参照)のみ受け付ける
