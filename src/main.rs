@@ -477,6 +477,13 @@ fn main() {
     full_name.insert(first_name, last_name);
     // 所有権がムーブされているので以下はコンパイルエラー
     // println!("{}", first_name);
+
+    // .getでOption型が返る
+    let name: Option<&String> = full_name.get("konan");
+    match name {
+        Some(ele) => println!("{:?}", ele),
+        None => println!("no name"),
+    }
 }
 
 // Summaryトレイトを実装したインスタンス(の参照)のみ受け付ける
