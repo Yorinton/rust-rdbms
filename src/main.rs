@@ -514,6 +514,40 @@ fn main() {
         *count += 1;
     }
     println!("{:?}", map);
+
+    // 平均値
+    let mut vec_int: Vec<i32> = vec![10, 105, 1, 1, 1, 223, 45];
+    let mut sum: f64 = 0.0;
+    for val in &vec_int {
+        sum += f64::from(*val);
+    }
+    let mean: f64 = sum / vec_int.len() as f64;
+    println!("{}", &mean);
+
+    // 中央値
+    vec_int.sort();
+    println!("{:?}", &vec_int);
+    #[allow(unused_assignments)]
+    let mut center: usize = 0;
+    if let 0 = vec_int.len() % 2 {
+        center = vec_int.len() / 2 - 1;
+    } else {
+        center = vec_int.len() / 2;
+    }
+    let median = vec_int.get(center);
+    println!("{:?}", median);
+
+    // 最頻値
+    let mut hash_map: HashMap<i32, i32> = HashMap::new();
+    // Vec<T>をインデックス付きでループするには.iter().enumerate()でkey,valueのタプルを取得できる
+    for (key, val) in vec_int.iter().enumerate() {
+        // key, valはforループ内でのみ有効なローカル変数なので、
+        // forループ内で他で使わなければ所有権渡しちゃってもOK
+        let count = hash_map.entry(*val).or_insert(0);
+        // countは可変参照なので、インクリメントすることでhash_mapの値が実際に更新される
+        *count += 1;
+    }
+    println!("{:?}", &hash_map);
 }
 
 // Summaryトレイトを実装したインスタンス(の参照)のみ受け付ける
