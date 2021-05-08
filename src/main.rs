@@ -557,7 +557,40 @@ fn main() {
         }
     }
     println!("{:?}", &mode);
+
+    // ピッグ・ラテン
+    let a = "penpen";
+    let b = "apple";
+    println!("{:?}", pig_latin_single_byte(&a));
+    println!("{:?}", pig_latin_single_byte(&b));
+
 }
+
+fn pig_latin_single_byte(text: &str) -> String {    
+    let mut ret = text.to_string();
+    // .collect()でVec<T>を生成
+    let vec_char: Vec<char> = ret.chars().collect();
+    let first: char = vec_char[0];
+
+    // 文字列に特定のcharを追加
+    ret.push('-');
+    
+    // Vec内に特定の要素が存在するか検証
+    let vowels: Vec<char> = vec!['a', 'i', 'u', 'e', 'o'];
+    if vowels.contains(&first) == true {
+        ret.push('h');
+        ret.push('a');
+        ret.push('y');
+    } else {
+        // 文字列から特定の文字(char)を削除する
+        ret.retain(|c| c != first);
+        ret.push(first);
+        ret.push('a');
+        ret.push('y');
+    }
+    ret
+}
+
 
 // Summaryトレイトを実装したインスタンス(の参照)のみ受け付ける
 fn notify(item: &impl Summary) {
