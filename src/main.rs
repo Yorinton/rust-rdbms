@@ -547,7 +547,16 @@ fn main() {
         // countは可変参照なので、インクリメントすることでhash_mapの値が実際に更新される
         *count += 1;
     }
-    println!("{:?}", &hash_map);
+    let mut max = 0;
+    let mut mode = 0;
+    for (k, v) in &hash_map {
+        if v > &max {
+            max = *v;
+            // 最頻値を更新
+            mode = *k;
+        }
+    }
+    println!("{:?}", &mode);
 }
 
 // Summaryトレイトを実装したインスタンス(の参照)のみ受け付ける
