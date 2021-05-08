@@ -467,6 +467,16 @@ fn main() {
     // 型注釈の<_,_>の型はコンパイル時にベクタの値の型からコンパイルが型推論する
     let scores: HashMap<_,_> = teams.iter().zip(initial_scores.iter()).collect();
     println!("{:?}", &scores);
+
+    // HashMapに値が渡される場合、
+    // Copyトレイトを実装している型はコピーされ、そうでない場合は所有権がムーブされる
+    let first_name = String::from("konan");
+    let last_name = String::from("edogawa");
+    let mut full_name: HashMap<String, String> = HashMap::new();
+    // String型なので所有権がムーブされる
+    full_name.insert(first_name, last_name);
+    // 所有権がムーブされているので以下はコンパイルエラー
+    // println!("{}", first_name);
 }
 
 // Summaryトレイトを実装したインスタンス(の参照)のみ受け付ける
