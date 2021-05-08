@@ -578,15 +578,12 @@ fn pig_latin_single_byte(text: &str) -> String {
     // Vec内に特定の要素が存在するか検証
     let vowels: Vec<char> = vec!['a', 'i', 'u', 'e', 'o'];
     if vowels.contains(&first) == true {
-        ret.push('h');
-        ret.push('a');
-        ret.push('y');
+        ret.push_str("hay");
     } else {
         // 文字列から特定の文字(char)を削除する
         ret.retain(|c| c != first);
         ret.push(first);
-        ret.push('a');
-        ret.push('y');
+        ret.push_str("ay");
     }
     ret
 }
