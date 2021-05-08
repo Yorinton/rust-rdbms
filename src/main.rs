@@ -466,7 +466,7 @@ fn main() {
     // .collectでHashMapを生成
     // 型注釈の<_,_>の型はコンパイル時にベクタの値の型からコンパイルが型推論する
     let scores: HashMap<_,_> = teams.iter().zip(initial_scores.iter()).collect();
-    println!("{:?}", &scores);
+    // println!("{:?}", &scores);
 
     // HashMapに値が渡される場合、
     // Copyトレイトを実装している型はコピーされ、そうでない場合は所有権がムーブされる
@@ -492,6 +492,18 @@ fn main() {
     for (key, value) in &scores {
         println!("{}: {}", key, value);
     }
+
+    // 値の更新
+    // 上書き
+    full_name.insert("konan".to_string(), "yodogawa".to_string());
+    println!("{:?}", &full_name);
+
+    let mut scores = HashMap::new();
+    scores.insert(String::from("Blue"), 10);
+    // キーが存在したら無視、キーが存在しない場合はinsert
+    scores.entry(String::from("Yellow")).or_insert(50);
+    scores.entry(String::from("Blue")).or_insert(50);
+    println!("{:?}", scores); // {"Yellow": 50, "Blue": 10}
 }
 
 // Summaryトレイトを実装したインスタンス(の参照)のみ受け付ける
