@@ -484,6 +484,14 @@ fn main() {
         Some(ele) => println!("{:?}", ele),
         None => println!("no name"),
     }
+
+    for (key, value) in &full_name {
+        println!("{}", &value);
+    }
+
+    for (key, value) in &scores {
+        println!("{}: {}", key, value);
+    }
 }
 
 // Summaryトレイトを実装したインスタンス(の参照)のみ受け付ける
