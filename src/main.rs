@@ -563,6 +563,19 @@ fn main() {
     let b = "apple";
     println!("{:?}", pig_latin_ascii(&a));
     println!("{:?}", pig_latin_ascii(&b));
+
+    let mut departments: HashMap<&String, Vec<String>> = HashMap::new();
+    let department_name = String::from("技術部");
+    let exist_members = vec![String::from("Aさん"), String::from("Bさん")];
+    departments.insert(&department_name, exist_members);
+    
+    // Option<T>内のSome(T)は不変参照になる match xxx { Some(&ele) => println!("{}", ele) }
+    // そのため、取得したOptionからSomeの値を得て、その値を更新したい場合は、
+    // .clone()で値をメモリの別領域にコピーしてから編集を行う必要がある
+    let mut mems = departments.get(&department_name).unwrap().clone();
+    mems.push(String::from("Cさん"));
+    departments.insert(&department_name, mems);
+    println!("{:?}", departments);
 }
 
 fn pig_latin_ascii(text: &str) -> String {
