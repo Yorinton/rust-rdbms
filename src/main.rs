@@ -576,6 +576,12 @@ fn main() {
     mems.push(String::from("Cさん"));
     departments.insert(&department_name, mems);
     println!("{:?}", departments);
+
+    let vec = vec![2,11];
+    // 値の存在しないindexにアクセスしようとするとpanic
+    // Cなどの他言語では該当の箇所のメモリを読みにいこうとする(バッファオーバーリード)ものがある
+    // 攻撃者が配列の後ろにある、読めるべきでないデータを読めるよう添字を操作できたらセキュリティ脆弱性に繋がる可能性もある
+    vec[99];
 }
 
 fn pig_latin_ascii(text: &str) -> String {
