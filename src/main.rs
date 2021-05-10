@@ -628,6 +628,10 @@ fn main() {
     // エラーの場合メッセージを指定してpanic!マクロを呼ぶ
     let err_message = format!("can't open the file {:?}", file_path);
     let f4 = File::open("test.txt").expect(&err_message);
+
+    // ?はエラーの場合にErr(x)をreturnするため、
+    // std::ops::Tryトレイト(Result、Optionなど)を実装した型を返す関数内でしか使えない
+    // let f5 = File::open("test.txt")?;
 }
 
 // エラー処理を上位の関数に移譲する
