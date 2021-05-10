@@ -18,6 +18,7 @@ use std::any::{type_name};
 use std::ops::Add;
 use std::cmp::{PartialOrd};
 use std::fs::File;
+#[allow(unused_imports)]
 use std::io::{Error, ErrorKind};
 
 // 異なるモジュールから同名の要素(structなど)をimportすることは出来ない
@@ -618,6 +619,15 @@ fn main() {
         }
     };
     println!("{:?}", f2);
+
+    // unwrap()
+    // エラーの場合panic!マクロを呼ぶ
+    // let f3 = File::open("world.txt").unwrap();
+
+    // expect()
+    // エラーの場合メッセージを指定してpanic!マクロを呼ぶ
+    let err_message = format!("can't open the file {:?}", file_path);
+    let f4 = File::open("test.txt").expect(&err_message);
 }
 
 fn pig_latin_ascii(text: &str) -> String {
