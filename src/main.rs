@@ -17,6 +17,8 @@ use std::cell::RefCell;
 use std::any::{type_name};
 use std::ops::Add;
 use std::cmp::{PartialOrd};
+use std::fs::File;
+use std::io::Error;
 
 // 異なるモジュールから同名の要素(structなど)をimportすることは出来ない
 // RustがどちらのResultを使っているか分からないから
@@ -581,7 +583,19 @@ fn main() {
     // 値の存在しないindexにアクセスしようとするとpanic
     // Cなどの他言語では該当の箇所のメモリを読みにいこうとする(バッファオーバーリード)ものがある
     // 攻撃者が配列の後ろにある、読めるべきでないデータを読めるよう添字を操作できたらセキュリティ脆弱性に繋がる可能性もある
-    vec[99];
+    // vec[99];
+
+    // panicではなくResultが返る例
+    let file_path = "hello.txt";
+    let f: Result<File, Error> = File::open(file_path);
+    let f = match f {
+        Ok(file) => {
+            println!("{:?}", file);
+        },
+        Err(err) => {
+            panic!("can't open the file :{}, error: {:?}", file_path, err);
+        }
+    };
 }
 
 fn pig_latin_ascii(text: &str) -> String {
