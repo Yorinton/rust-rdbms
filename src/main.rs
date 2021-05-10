@@ -660,6 +660,16 @@ fn read_username_from_file_short(file_path: &str) -> Result<String, io::Error> {
     Ok(buf)
 }
 
+// メソッド連結版
+// ?をつけた場合、matchと異なり、返却する型をシグネチャで定義した型に変換してくれる(Fromトレイトを実装しているから)
+// 関数内の処理が複数の理由で失敗する可能性があるのに、1つの型で返却する必要がある場合に使える
+#[allow(dead_code)]
+fn read_username_from_file_very_short(file_path: &str) -> Result<String, io::Error> {
+    let mut buf = String::new();
+    File::open(file_path)?.read_to_string(&mut buf)?;
+    Ok(buf)
+}
+
 fn pig_latin_ascii(text: &str) -> String {
     let mut ret = text.to_string();
     // .collect()でVec<T>を生成
