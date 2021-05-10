@@ -647,6 +647,19 @@ fn read_username_from_file(file_path: &str) -> Result<String, io::Error> {
     }
 }
 
+// Resultを返す場合、「?」で代用できる
+// Result値を返す式の後ろに?をつけることで、
+// 成功時はOk()、失敗時はErr()を返す
+#[allow(dead_code)]
+fn read_username_from_file_short(file_path: &str) -> Result<String, io::Error> {
+    let mut f = File::open(file_path)?;
+    let mut buf = String::new();
+    f.read_to_string(&mut buf)?;
+    // read_to_stringは引数にデータを入れる
+    // そのためResultとして返す場合は最後にOk(buf)とする必要がある
+    Ok(buf)
+}
+
 fn pig_latin_ascii(text: &str) -> String {
     let mut ret = text.to_string();
     // .collect()でVec<T>を生成
