@@ -19,7 +19,7 @@ use std::ops::Add;
 use std::cmp::{PartialOrd};
 use std::fs::File;
 #[allow(unused_imports)]
-use std::io::{Error, ErrorKind};
+use std::io::{Error, ErrorKind, Read};
 
 // 異なるモジュールから同名の要素(structなど)をimportすることは出来ない
 // RustがどちらのResultを使っているか分からないから
@@ -628,6 +628,23 @@ fn main() {
     // エラーの場合メッセージを指定してpanic!マクロを呼ぶ
     let err_message = format!("can't open the file {:?}", file_path);
     let f4 = File::open("test.txt").expect(&err_message);
+}
+
+// エラー処理を上位の関数に移譲する
+// Result型を返したい場合は、Ok(x)かErr(x)を返却するようにすればいい
+#[allow(dead_code)]
+fn read_username_from_file(file_path: &str) -> Result<String, io::Error> {
+    let f = File::open(file_path);
+    let mut file = match f {
+        Ok(f) => f,
+        Err(e) => return Err(e),
+    };
+
+    let mut buf = String::new();
+    match file.read_to_string(&mut buf) {
+        Ok(_) => Ok(buf),
+        Err(e) => Err(e)
+    }
 }
 
 fn pig_latin_ascii(text: &str) -> String {
