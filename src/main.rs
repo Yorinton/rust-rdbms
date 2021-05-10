@@ -18,7 +18,7 @@ use std::any::{type_name};
 use std::ops::Add;
 use std::cmp::{PartialOrd};
 use std::fs::File;
-use std::io::Error;
+use std::io::{Error, ErrorKind};
 
 // 異なるモジュールから同名の要素(structなど)をimportすることは出来ない
 // RustがどちらのResultを使っているか分からないから
@@ -587,15 +587,37 @@ fn main() {
 
     // panicではなくResultが返る例
     let file_path = "hello.txt";
-    let f: Result<File, Error> = File::open(file_path);
-    let f = match f {
-        Ok(file) => {
-            println!("{:?}", file);
+    // let f: Result<File, Error> = File::open(file_path);
+    // let f = match f {
+    //     Ok(file) => {
+    //         println!("{:?}", file);
+    //     },
+    //     Err(err) => {
+    //         panic!("can't open the file :{}, error: {:?}", file_path, err);
+    //     }
+    // };
+
+    let f2 = File::open(file_path);
+    let f2 = match f2 {
+        Ok(file) => file,
+        // マッチガード
+        // refはerrが条件式にムーブしないように必要
+        // refをつけると値にマッチしてその値への参照を返す(変数に入れる)
+        // &をつけると参照にマッチして値を返す(変数に入れる)
+        Err(ref err) if err.kind() == ErrorKind::NotFound => {
+            // ErrorKind::NotFoundにマッチした場合、ファイルを作成する
+            match File::create(file_path) {
+                Ok(file_created) => file_created,
+                Err(err) => {
+                    panic!("Tried to create file {:?} but there was a problem: {:?}", file_path, err);
+                }
+            }
         },
         Err(err) => {
-            panic!("can't open the file :{}, error: {:?}", file_path, err);
+            panic!("can't open the file {:?}, error: {:?}", file_path, err);
         }
     };
+    println!("{:?}", f2);
 }
 
 fn pig_latin_ascii(text: &str) -> String {
