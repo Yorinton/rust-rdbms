@@ -637,6 +637,12 @@ fn main() {
 
     let guess = Guess::new(20);
     println!("{:?}", guess.value());
+
+    // valueはprivateなので、以下はコンパイルエラーになる
+    // これにより、new関数を通してしかGuessインスタンスを生成できない
+    // let guess2 = Guess {
+    //     value: 22,
+    // };
 }
 
 // エラー処理を上位の関数に移譲する
