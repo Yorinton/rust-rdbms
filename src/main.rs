@@ -46,9 +46,11 @@ use std::fs::*;
 // src直下のファイル名(拡張子抜き)をモジュール名としてimportできる
 mod summary;
 mod back_of_house;
+mod guess;
 // mod xxxxでモジュールをimportして、useでモジュール内の要素(structやenumなど)をimportできる
 use summary::{Tweet, Summary};
 use back_of_house::{BreakFast, Language};
+use guess::{Guess};
 
 // 相対パス：呼び出し側と定義側を一緒に移動する可能性が高いならこっち
 // use lib::traits::Summary;
@@ -626,12 +628,15 @@ fn main() {
 
     // expect()
     // エラーの場合メッセージを指定してpanic!マクロを呼ぶ
-    let err_message = format!("can't open the file {:?}", file_path);
-    let f4 = File::open("test.txt").expect(&err_message);
+    // let err_message = format!("can't open the file {:?}", file_path);
+    // let f4 = File::open("test.txt").expect(&err_message);
 
     // ?はエラーの場合にErr(x)をreturnするため、
     // std::ops::Tryトレイト(Result、Optionなど)を実装した型を返す関数内でしか使えない
     // let f5 = File::open("test.txt")?;
+
+    let guess = Guess::new(20);
+    println!("{:?}", guess.value());
 }
 
 // エラー処理を上位の関数に移譲する
