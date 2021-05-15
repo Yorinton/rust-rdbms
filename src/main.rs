@@ -707,9 +707,12 @@ fn pig_latin_ascii(text: &str) -> String {
     ret
 }
 
+mod rectangle;
+
 #[cfg(test)]
 mod tests {    
     use super::*;
+    use super::rectangle::Rectangle;
     // 各テストは新規スレッドで実行される
     // メインスレッドがテストスレッドが死んだと確認した時 = panicが発生しプログラムが停止した時？
     // テストは失敗したと位置付けられる
@@ -729,6 +732,13 @@ mod tests {
         let val: &str = "hello";
         let type_name: String = type_of(val);
         assert_eq!(type_name, String::from("&str"));
+    }
+
+    #[test]
+    fn test_rectangle() {
+        let rect = Rectangle::new(22, 44);
+        let other = Rectangle::new(11, 33);
+        assert!(rect.can_hold(other));
     }
 }
 
