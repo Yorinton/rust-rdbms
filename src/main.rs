@@ -709,9 +709,18 @@ fn pig_latin_ascii(text: &str) -> String {
 
 #[cfg(test)]
 mod tests {
+    // 各テストは新規スレッドで実行される
+    // メインスレッドがテストスレッドが死んだと確認した時 = panicが発生しプログラムが停止した時？
+    // テストは失敗したと位置付けられる
     #[test]
     fn test_pig_latin_ascii() {
+        // assert_eq!は、2つの引数が同一でない場合内部でpanic!が実行されている
         assert_eq!(2+2, 4);
+    }
+
+    #[test]
+    fn test_fail() {
+        panic!("このテストは失敗する");
     }
 }
 
