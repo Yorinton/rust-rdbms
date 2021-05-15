@@ -708,7 +708,8 @@ fn pig_latin_ascii(text: &str) -> String {
 }
 
 #[cfg(test)]
-mod tests {
+mod tests {    
+    use super::*;
     // 各テストは新規スレッドで実行される
     // メインスレッドがテストスレッドが死んだと確認した時 = panicが発生しプログラムが停止した時？
     // テストは失敗したと位置付けられる
@@ -721,6 +722,13 @@ mod tests {
     #[test]
     fn test_fail() {
         panic!("このテストは失敗する");
+    }
+
+    #[test]
+    fn test_type_of() {
+        let val: &str = "hello";
+        let type_name: String = type_of(val);
+        assert_eq!(type_name, String::from("&str"));
     }
 }
 
@@ -759,6 +767,7 @@ fn type_of<T>(_: T) -> String{
     let a = type_name::<T>();
     return a.to_string();
 }
+
 
 fn add_message(msgs: &Rc<RefCell<Vec<String>>>, msg: String) {
     // borrow_mut()でRefCell<T>の内部の値(Vec<String>)への可変参照を得る
