@@ -707,6 +707,14 @@ fn pig_latin_ascii(text: &str) -> String {
     ret
 }
 
+#[cfg(test)]
+mod tests {
+    #[test]
+    fn test_pig_latin_ascii() {
+        assert_eq!(2+2, 4);
+    }
+}
+
 
 // Summaryトレイトを実装したインスタンス(の参照)のみ受け付ける
 fn notify(item: &impl Summary) {
