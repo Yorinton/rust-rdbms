@@ -732,6 +732,13 @@ mod tests {
         let val: &str = "hello";
         let type_name: String = type_of(val);
         assert_eq!(type_name, String::from("&str"));
+
+        let val2: String = String::from("wei");
+        let type_name_2: String = type_of(val2);
+        // assert_eq!、assert_ne!は2つの引数の順番は関係ない
+        // leftとrightが等しいか(等しくないか)を判定する
+        assert_eq!(String::from("alloc::string::String"), type_name_2);
+        assert_ne!(String::from("&str"), type_name_2);
     }
 
     #[test]
