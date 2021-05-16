@@ -735,10 +735,17 @@ mod tests {
     }
 
     #[test]
-    fn test_rectangle() {
-        let rect = Rectangle::new(22, 44);
-        let other = Rectangle::new(11, 33);
-        assert!(rect.can_hold(other));
+    fn test_large_can_hold_small() {
+        let large = Rectangle::new(22, 44);
+        let small = Rectangle::new(11, 33);
+        assert!(large.can_hold(small));
+    }
+
+    #[test]
+    fn test_small_can_not_hold_large() {
+        let large = Rectangle::new(22, 44);
+        let small = Rectangle::new(11, 33);
+        assert!(!small.can_hold(large));
     }
 }
 
