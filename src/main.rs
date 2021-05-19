@@ -761,7 +761,9 @@ mod tests {
         let left = Rectangle::new(11, 33);
         let right = Rectangle::new(11, 33);
         // leftとrightが同一であることをアサート
-        assert_eq!(left, right);
+        // 第３引数以降でdebug用のカスタムメッセージを設定できる
+        // カスタムメッセージは内部でformat!マクロに渡される
+        assert_eq!(left, right, "left: {:?} and right: {:?} were not equal", left, right);
     }
 
     #[test]
