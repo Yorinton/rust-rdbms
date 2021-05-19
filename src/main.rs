@@ -722,10 +722,10 @@ mod tests {
         assert_eq!(2+2, 4);
     }
 
-    #[test]
-    fn test_fail() {
-        panic!("このテストは失敗する");
-    }
+    // #[test]
+    // fn test_fail() {
+    //     panic!("このテストは失敗する");
+    // }
 
     #[test]
     fn test_type_of() {
@@ -745,14 +745,30 @@ mod tests {
     fn test_large_can_hold_small() {
         let large = Rectangle::new(22, 44);
         let small = Rectangle::new(11, 33);
-        assert!(large.can_hold(small));
+        assert!(large.can_hold(&small));
+    }
+
+    #[test]
+    fn test_not_equal_rectangles() {
+        let large = Rectangle::new(22, 44);
+        let small = Rectangle::new(11, 33);
+        // largeとsmallが異なることをアサート
+        assert_ne!(large, small);
+    }
+
+    #[test]
+    fn test_equal_rectangles() {
+        let left = Rectangle::new(11, 33);
+        let right = Rectangle::new(11, 33);
+        // leftとrightが同一であることをアサート
+        assert_eq!(left, right);
     }
 
     #[test]
     fn test_small_can_not_hold_large() {
         let large = Rectangle::new(22, 44);
         let small = Rectangle::new(11, 33);
-        assert!(!small.can_hold(large));
+        assert!(!small.can_hold(&large));
     }
 }
 
