@@ -747,6 +747,20 @@ mod tests {
         }
     }
 
+    // use std::fs::File;
+    // use std::io::{self, Read, Write, BufReader};
+    // #[test]
+    // fn test_write_file() -> io::Result<()> {
+    //     let file_path: &str = "hello.txt";
+    //     let text: String = String::from("baba");
+    //     let buf = BufReader::new(text.as_bytes()).bytes().collect::<io::Result<Vec<u8>>>()?;
+    //     // createはwrite-only、openはread-only
+    //     let mut file = File::create(file_path)?;
+    //     file.write_all(&buf)?;
+    //     file.flush()?;
+    //     Ok(())
+    // }
+
     #[test]
     fn test_file_open() -> io::Result<()> { // io::Result<T> = result::Result<T, Error>
         let file_path = "hello.txt";
