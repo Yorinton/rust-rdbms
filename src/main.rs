@@ -713,6 +713,15 @@ mod rectangle;
 mod tests {    
     use super::*;
     use super::rectangle::Rectangle;
+    use super::guess::{Guess};
+
+    // panicが起こることをテストする
+    #[test]
+    #[should_panic]
+    fn test_guess_greater_than_100() {
+        Guess::new(199);
+    }
+
     // 各テストは新規スレッドで実行される
     // メインスレッドがテストスレッドが死んだと確認した時 = panicが発生しプログラムが停止した時？
     // テストは失敗したと位置付けられる
