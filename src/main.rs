@@ -733,9 +733,30 @@ mod tests {
     // メインスレッドがテストスレッドが死んだと確認した時 = panicが発生しプログラムが停止した時？
     // テストは失敗したと位置付けられる
     #[test]
-    fn test_pig_latin_ascii() {
+    fn it_works() {
         // assert_eq!は、2つの引数が同一でない場合内部でpanic!が実行されている
         assert_eq!(2+2, 4);
+    }
+
+    #[test]
+    fn it_works_result() -> Result<(), String> {
+        if 2 + 2 == 4 {
+            Ok(())
+        } else {
+            Err(String::from("two plus two does not equal four"))
+        }
+    }
+
+    #[test]
+    fn test_file_open() -> io::Result<()> { // io::Result<T> = result::Result<T, Error>
+        let file_path = "hello.txt";
+        let mut buf: String = String::new();
+        // ?をつけることで失敗したら自動でErrorが返る
+        // テスト内で何らかの工程がErrヴァリアントを返したときに失敗するべきテストを書くのに便利
+        File::open(file_path)?.read_to_string(&mut buf)?;
+        // bufにファイルの中身が入るのでここでテスト
+        assert_eq!(buf, String::from("file for test"));
+        Ok(())
     }
 
     // #[test]
@@ -788,6 +809,7 @@ mod tests {
         let small = Rectangle::new(11, 33);
         assert!(!small.can_hold(&large));
     }
+
 }
 
 
