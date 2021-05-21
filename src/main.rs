@@ -709,6 +709,11 @@ fn pig_latin_ascii(text: &str) -> String {
 
 mod rectangle;
 
+// cfgアトリビュートは、環境に応じたコンパイルを行うためのもの
+// cfg(test)はテスト環境
+// cfg(target_os = "linux")はosがlinuxの場合のみコンパイルする
+// cfg(not(target_os = "linux"))はosがlinuxでない場合のみコンパイルする
+// if cfg!(target_os = "linux") {} のようにマクロも使える
 #[cfg(test)]
 mod tests {    
     use super::*;
