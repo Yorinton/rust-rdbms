@@ -6,8 +6,10 @@ pub struct Guess {
 
 impl Guess {
     pub fn new(num: u32) -> Self {
-        if num > 100 || num < 1 {
-            panic!("too big or too small number: {}", num);
+        if num > 100 {
+            panic!("too big number: {}", num);
+        } else if num < 1 {
+            panic!("too small number: {}", num);
         }
         Guess {
             value: num

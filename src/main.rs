@@ -716,10 +716,17 @@ mod tests {
     use super::guess::{Guess};
 
     // panicが起こることをテストする
+    // expected引数でpanicで出力するメッセージを検証できる
     #[test]
-    #[should_panic]
+    #[should_panic(expected = "too big number: 199")]
     fn test_guess_greater_than_100() {
         Guess::new(199);
+    }
+
+    #[test]
+    #[should_panic(expected = "too small number: 0")]
+    fn test_guess_smaller_than_1() {
+        Guess::new(0);
     }
 
     // 各テストは新規スレッドで実行される
