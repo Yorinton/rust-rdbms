@@ -644,11 +644,16 @@ fn main() {
     //     value: 22,
     // };
 
-    match file_create() {
-        // Result<T,E>はOk(T)かErr(E)を返す
-        // Err(err)のerr変数にはE型の値が入る
-        Ok(()) => println!("success"),
-        Err(err) => println!("failed: {}", err)
+    // match file_create() {
+    //     // Result<T,E>はOk(T)かErr(E)を返す
+    //     // Err(err)のerr変数にはE型の値が入る
+    //     Ok(()) => println!("success"),
+    //     Err(err) => println!("failed: {}", err)
+    // }
+
+    match file_read() {
+        Ok(content) => println!("content is {:?}", content),
+        Err(e) => println!("failed: {:?}", e)
     }
 }
 
@@ -856,6 +861,16 @@ fn file_create() -> Result<(), Error> {
     // write_allメソッドにはバイト列を渡す
     file.write_all(content.as_bytes())?;
     Ok(())
+}
+
+fn file_read() -> Result<String, Error> {
+    println!("Enter file name");
+    let mut filename = String::new();
+    io::stdin().read_line(&mut filename)?;
+    let mut content = String::new();
+    // 標準入力から値を受け取る際に空白文字が入ってしまうので.trim()が必要
+    File::open(filename.trim())?.read_to_string(&mut content)?;
+    Ok(content)
 }
 
 // Summaryトレイトを実装したインスタンス(の参照)のみ受け付ける
