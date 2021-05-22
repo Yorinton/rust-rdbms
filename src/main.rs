@@ -19,7 +19,7 @@ use std::ops::Add;
 use std::cmp::{PartialOrd};
 use std::fs::File;
 #[allow(unused_imports)]
-use std::io::{Error, ErrorKind, Read};
+use std::io::{self, Error, ErrorKind, Read, Write};
 
 // 異なるモジュールから同名の要素(structなど)をimportすることは出来ない
 // RustがどちらのResultを使っているか分からないから
@@ -30,7 +30,7 @@ use std::fmt::Result;
 // 以下のようにimportして、
 // io::Result、fmt::Resultのように使う
 #[allow(unused_imports)]
-use std::io::{self, Seek}; // std::ioとstd::io::Seekをこのスコープに取り込みたい場合の書き方(selfを使う)
+use std::io::{Seek}; // std::ioとstd::io::Seekをこのスコープに取り込みたい場合の書き方(selfを使う)
 
 // asを使ってエイリアスを設定することも可能
 #[allow(unused_imports)]
@@ -643,6 +643,13 @@ fn main() {
     // let guess2 = Guess {
     //     value: 22,
     // };
+
+    match file_create() {
+        // Result<T,E>はOk(T)かErr(E)を返す
+        // Err(err)のerr変数にはE型の値が入る
+        Ok(()) => println!("success"),
+        Err(err) => println!("failed: {}", err)
+    }
 }
 
 // エラー処理を上位の関数に移譲する
@@ -831,6 +838,25 @@ mod tests {
 
 }
 
+// 入力値からファイルを作成
+fn file_create() -> Result<(), Error> {
+    println!("Enter file name");
+    
+    // 指定した名前でファイル作成
+    let mut name = String::new();
+    // 標準入力を値をname変数にいれる
+    io::stdin().read_line(&mut name)?;
+    let mut file = File::create(name.trim())?;
+
+    println!("Enter content of file");
+
+    // ファイルに書き込み
+    let mut content = String::new();
+    io::stdin().read_line(&mut content)?;
+    // write_allメソッドにはバイト列を渡す
+    file.write_all(content.as_bytes())?;
+    Ok(())
+}
 
 // Summaryトレイトを実装したインスタンス(の参照)のみ受け付ける
 fn notify(item: &impl Summary) {
