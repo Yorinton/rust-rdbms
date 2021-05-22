@@ -645,17 +645,75 @@ fn main() {
     //     value: 22,
     // };
 
-    match file_create() {
-        // Result<T,E>はOk(T)かErr(E)を返す
-        // Err(err)のerr変数にはE型の値が入る
-        Ok(()) => println!("success"),
-        Err(err) => println!("failed: {}", err)
-    }
+    // match file_create() {
+    //     // Result<T,E>はOk(T)かErr(E)を返す
+    //     // Err(err)のerr変数にはE型の値が入る
+    //     Ok(()) => println!("success"),
+    //     Err(err) => println!("failed: {}", err)
+    // }
 
     match file_read() {
         Ok(content) => println!("content is {:?}", content),
         Err(e) => println!("failed: {:?}", e)
     }
+
+    match file_append() {
+        Ok(()) => println!("append success"),
+        Err(e) => println!("failed: {:?}", e)
+    }
+}
+
+fn file_append() -> Result<(), Error> {
+    println!("Enter file name");
+
+    // 指定した名前でファイルを開く
+    let mut name = String::new();
+    // 標準入力を値をname変数にいれる
+    io::stdin().read_line(&mut name)?;
+
+    // append(true)にすることで編集可能になる
+    // write(truw)の場合は上書き、append(true)の場合は追加
+    // File::openやFile::createは、OpenOptionsの色んな設定をラップしている
+    let mut file = OpenOptions::new().append(true).open(name.trim())?;
+
+    println!("Enter append content");
+    let mut content = String::new();
+    io::stdin().read_line(&mut content)?;
+    file.write_all(content.as_bytes())?;
+    Ok(())
+}
+
+// 入力値からファイルを作成
+fn file_create() -> Result<(), Error> {
+    println!("Enter file name");
+    
+    // 指定した名前でファイル作成
+    let mut name = String::new();
+    // 標準入力を値をname変数にいれる
+    io::stdin().read_line(&mut name)?;
+    if Path::new(name.trim()).exists() {
+        panic!("path have already exist: {:?}", name.trim());
+    }
+    let mut file = File::create(name.trim())?;
+
+    println!("Enter content of file");
+
+    // ファイルに書き込み
+    let mut content = String::new();
+    io::stdin().read_line(&mut content)?;
+    // write_allメソッドにはバイト列を渡す
+    file.write_all(content.as_bytes())?;
+    Ok(())
+}
+
+fn file_read() -> Result<String, Error> {
+    println!("Enter file name");
+    let mut filename = String::new();
+    io::stdin().read_line(&mut filename)?;
+    let mut content = String::new();
+    // 標準入力から値を受け取る際に空白文字が入ってしまうので.trim()が必要
+    File::open(filename.trim())?.read_to_string(&mut content)?;
+    Ok(content)
 }
 
 // エラー処理を上位の関数に移譲する
@@ -842,39 +900,6 @@ mod tests {
         assert!(!small.can_hold(&large));
     }
 
-}
-
-// 入力値からファイルを作成
-fn file_create() -> Result<(), Error> {
-    println!("Enter file name");
-    
-    // 指定した名前でファイル作成
-    let mut name = String::new();
-    // 標準入力を値をname変数にいれる
-    io::stdin().read_line(&mut name)?;
-    if Path::new(name.trim()).exists() {
-        panic!("path have already exist: {:?}", name.trim());
-    }
-    let mut file = File::create(name.trim())?;
-
-    println!("Enter content of file");
-
-    // ファイルに書き込み
-    let mut content = String::new();
-    io::stdin().read_line(&mut content)?;
-    // write_allメソッドにはバイト列を渡す
-    file.write_all(content.as_bytes())?;
-    Ok(())
-}
-
-fn file_read() -> Result<String, Error> {
-    println!("Enter file name");
-    let mut filename = String::new();
-    io::stdin().read_line(&mut filename)?;
-    let mut content = String::new();
-    // 標準入力から値を受け取る際に空白文字が入ってしまうので.trim()が必要
-    File::open(filename.trim())?.read_to_string(&mut content)?;
-    Ok(content)
 }
 
 // Summaryトレイトを実装したインスタンス(の参照)のみ受け付ける
