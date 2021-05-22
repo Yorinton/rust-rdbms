@@ -20,6 +20,7 @@ use std::cmp::{PartialOrd};
 use std::fs::File;
 #[allow(unused_imports)]
 use std::io::{self, Error, ErrorKind, Read, Write};
+use std::path::Path;
 
 // 異なるモジュールから同名の要素(structなど)をimportすることは出来ない
 // RustがどちらのResultを使っているか分からないから
@@ -644,12 +645,12 @@ fn main() {
     //     value: 22,
     // };
 
-    // match file_create() {
-    //     // Result<T,E>はOk(T)かErr(E)を返す
-    //     // Err(err)のerr変数にはE型の値が入る
-    //     Ok(()) => println!("success"),
-    //     Err(err) => println!("failed: {}", err)
-    // }
+    match file_create() {
+        // Result<T,E>はOk(T)かErr(E)を返す
+        // Err(err)のerr変数にはE型の値が入る
+        Ok(()) => println!("success"),
+        Err(err) => println!("failed: {}", err)
+    }
 
     match file_read() {
         Ok(content) => println!("content is {:?}", content),
@@ -851,6 +852,9 @@ fn file_create() -> Result<(), Error> {
     let mut name = String::new();
     // 標準入力を値をname変数にいれる
     io::stdin().read_line(&mut name)?;
+    if Path::new(name.trim()).exists() {
+        panic!("path have already exist: {:?}", name.trim());
+    }
     let mut file = File::create(name.trim())?;
 
     println!("Enter content of file");
