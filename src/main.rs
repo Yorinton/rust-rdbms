@@ -19,7 +19,7 @@ use std::ops::Add;
 use std::cmp::{PartialOrd};
 use std::fs::File;
 #[allow(unused_imports)]
-use std::io::{self, Error, ErrorKind, Read, Write};
+use std::io::{self, Error, ErrorKind, Read, Write, BufRead};
 use std::path::Path;
 
 // 異なるモジュールから同名の要素(structなど)をimportすることは出来ない
@@ -652,15 +652,45 @@ fn main() {
     //     Err(err) => println!("failed: {}", err)
     // }
 
-    match file_read() {
-        Ok(content) => println!("content is {:?}", content),
-        Err(e) => println!("failed: {:?}", e)
-    }
+    // match file_read() {
+    //     Ok(content) => println!("content is {:?}", content),
+    //     Err(e) => println!("failed: {:?}", e)
+    // }
 
-    match file_append() {
-        Ok(()) => println!("append success"),
-        Err(e) => println!("failed: {:?}", e)
+    // match file_append() {
+    //     Ok(()) => println!("append success"),
+    //     Err(e) => println!("failed: {:?}", e)
+    // }
+
+    match file_read_use_buf_reader() {
+        Ok(()) => println!("read_line success"),
+        Err(e) => println!("read_line fail")
     }
+}
+
+// BufReader <R>は、同じファイルまたはネットワークソケット(まだメモリに無いデータ)に対して、
+// 小さく繰り返し読み取りを行うプログラムの速度を向上させる
+// 一度に大量のデータを読んだり、読み取り頻度の低い場合は利点はない
+// Vec<u8>のように既にメモリ内にあるソースから読み込む場合も利点はない
+use std::io::BufReader;
+fn file_read_use_buf_reader() -> io::Result<()> {
+    let f = File::open("Cargo.toml")?;
+    let mut reader = BufReader::new(f);
+
+    let mut line = String::new();
+    let mut len: usize;
+    loop {
+        // read_lineは全てのbyteをnewline(0xA)が来るまで取得し、
+        // 引数に与えられたbufferに保持する
+        // read_lineを呼ぶごとに１行ずつ処理が進んでいく
+        // 残りの行数がlenに入る
+        len = reader.read_line(&mut line)?;
+        if len == 0 {
+            break;
+        }
+    }
+    println!("{}", line);
+    Ok(())
 }
 
 fn file_append() -> Result<(), Error> {
