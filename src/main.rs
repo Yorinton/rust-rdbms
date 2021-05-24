@@ -19,7 +19,7 @@ use std::ops::Add;
 use std::cmp::{PartialOrd};
 use std::fs::File;
 #[allow(unused_imports)]
-use std::io::{self, Error, ErrorKind, Read, Write, BufRead};
+use std::io::{self, Error, ErrorKind, Read, Write, BufRead, BufWriter};
 use std::path::Path;
 
 // 異なるモジュールから同名の要素(structなど)をimportすることは出来ない
@@ -666,6 +666,11 @@ fn main() {
         Ok(()) => println!("read_line success"),
         Err(e) => println!("read_line fail")
     }
+
+    match file_write_use_buf_writer() {
+        Ok(()) => println!("write success"),
+        Err(e) => println!("write fail")
+    }
 }
 
 // BufReader <R>は、同じファイルまたはネットワークソケット(まだメモリに無いデータ)に対して、
@@ -676,7 +681,7 @@ use std::io::BufReader;
 fn file_read_use_buf_reader() -> io::Result<()> {
     let f = File::open("Cargo.toml")?;
     let mut reader = BufReader::new(f);
-
+ 
     let mut line = String::new();
     let mut len: usize;
     loop {
@@ -691,6 +696,23 @@ fn file_read_use_buf_reader() -> io::Result<()> {
     }
     println!("{}", line);
     Ok(())
+}
+
+fn file_write_use_buf_writer() -> Result<(), io::Error> {
+    let f = OpenOptions::new().append(true).open("zero.txt")?;
+    let mut writer = BufWriter::new(f);
+    let texts: Vec<&str> = vec![
+        "aaaaa\n",
+        "bbbbb\n",
+        "ccccc\n"
+    ];
+    for s in texts {
+        // 書き込みの度にシステムコールが実行されるのではなく、
+        // メモリバッファに保持された上で、
+        // writer.flushのタイミングで１回だけシステムコールが呼ばれる
+        writer.write(s.as_bytes()).unwrap();
+    }
+    writer.flush()
 }
 
 fn file_append() -> Result<(), Error> {
