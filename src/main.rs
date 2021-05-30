@@ -8,5 +8,9 @@ fn main() {
     // args()は不正なUnicodeを含んでいた場合panicを起こす
     // 不正なUnicodeを受け入れる必要がある場合は,args_os()を使う
     let args: Vec<String> = env::args().collect();
-    println!("{:?}", args);
+
+    let query = &args[1];
+    let filename = &args[2];
+
+    println!("{:?}というファイルから{:?}という文字列を検索", query, filename);
 }
