@@ -24,7 +24,10 @@ fn main() -> io::Result<()> {
         let num: usize = reader.read_line(&mut buf)?;
         let res = buf.find(query);
         match res {
-            Some(_) => println!("{}", buf),
+            Some(_) => {
+                let replaced_buf: String = buf.replace(query, &format!("\x1b[31m{}\x1b[37m", query)).replace("\n", "");
+                println!("{}", replaced_buf);
+            },
             None => ()
         }
         buf.clear();
