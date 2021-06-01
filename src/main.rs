@@ -2,7 +2,7 @@ use std::env;
 use std::io;
 use std::io::prelude::*;
 use std::fs::File;
-use std::io::BufReader;
+use std::io::{BufReader, BufWriter};
 
 fn main() -> io::Result<()> {
     // env::args()で、コマンドラインから入力された引数を取得
@@ -20,13 +20,19 @@ fn main() -> io::Result<()> {
     let mut buf: String = String::new();
     let mut reader = BufReader::new(file);
 
+    // stdout.lock()・・stdoutのロックをloopの前に１度だけ取ることで速度向上
+    // BufWriter::new()・・標準出力への書き込みをメモリ内にバッファリングしてI/Oの頻度を抑える
+    let stdout = io::stdout();
+    let mut out = BufWriter::new(stdout.lock());
     loop {
         let num: usize = reader.read_line(&mut buf)?;
         let res = buf.find(query);
         match res {
             Some(_) => {
                 let replaced_buf: String = buf.replace(query, &format!("\x1b[31m{}\x1b[37m", query)).replace("\n", "");
-                println!("{}", replaced_buf);
+                writeln!(out, "{}", replaced_buf).unwrap();
+                // println!は毎回stdoutのロックを取っているため遅い
+                // println!("{}", replaced_buf);
             },
             None => ()
         }
@@ -35,11 +41,5 @@ fn main() -> io::Result<()> {
             break;
         }
     }
-    
-    // file.read_to_string(&mut buf)?;
-
-    //let res = buf.find(query);
-    // let res2: Vec<&str> = buf.matches(query).collect();
-    // println!("検索結果：{:?}", res2);
     Ok(())
 }
