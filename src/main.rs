@@ -12,7 +12,7 @@ fn main() -> io::Result<()> {
     // args()は不正なUnicodeを含んでいた場合panicを起こす
     // 不正なUnicodeを受け入れる必要がある場合は,args_os()を使う
     let args: Vec<String> = env::args().collect();
-    let config: GrepConfg = parse_confg(args);
+    let config: GrepConfg = GrepConfg::new(args);
 
     let file = File::open(config.filename).expect("file not found");
     let mut buf: String = String::new();
@@ -42,22 +42,20 @@ fn main() -> io::Result<()> {
     Ok(())
 }
 
-// 引数で参照を受け取っている = 借用している
-// 受け取った参照を構造体の値としてセットしreturnしている
-// 'aにより、引数のライフタイム = スコープがGrepConfgのqueryやfilenameと同じであることを保証している
-// argsが先にスコープ外になった場合、argsの中の要素もドロップされ、queryやfilenameがダングリング参照になる
-fn parse_confg(args: Vec<String>) -> GrepConfg {
-    GrepConfg {
-        // .cloneは新しいメモリ領域にコピーを生成するため、
-        // 参照を保持するよりもメモリと時間を食う
-        // ただ、参照を保持する場合ライフタイムの設定が必要なので、
-        // それが無い分コードの見通しは良くなる
-        query: args[1].clone(),
-        filename: args[2].clone()
-    }
-}
-
 struct GrepConfg {
     query: String,
     filename: String
+}
+
+impl GrepConfg {
+    pub fn new(args: Vec<String>) -> Self {
+        GrepConfg {
+            // .cloneは新しいメモリ領域にコピーを生成するため、
+            // 参照を保持するよりもメモリと時間を食う
+            // ただ、参照を保持する場合ライフタイムの設定が必要なので、
+            // それが無い分コードの見通しは良くなる
+            query: args[1].clone(),
+            filename: args[2].clone()
+        }
+    }
 }
