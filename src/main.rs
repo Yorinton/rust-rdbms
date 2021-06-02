@@ -12,7 +12,7 @@ fn main() -> io::Result<()> {
     // args()は不正なUnicodeを含んでいた場合panicを起こす
     // 不正なUnicodeを受け入れる必要がある場合は,args_os()を使う
     let args: Vec<String> = env::args().collect();
-    let config: GrepConfg = parse_confg(&args);
+    let config: GrepConfg = parse_confg(args);
 
     let file = File::open(config.filename).expect("file not found");
     let mut buf: String = String::new();
@@ -24,10 +24,10 @@ fn main() -> io::Result<()> {
     let mut out = BufWriter::new(stdout.lock());
     loop {
         let num: usize = reader.read_line(&mut buf)?;
-        let res = buf.find(config.query);
+        let res = buf.find(&config.query);
         match res {
             Some(_) => {
-                let replaced_buf: String = buf.replace(config.query, &format!("\x1b[31m{}\x1b[37m", config.query)).replace("\n", "");
+                let replaced_buf: String = buf.replace(&config.query, &format!("\x1b[31m{}\x1b[37m", config.query)).replace("\n", "");
                 writeln!(out, "{}", replaced_buf).unwrap();
                 // println!は毎回stdoutのロックを取っているため遅い
                 // println!("{}", replaced_buf);
@@ -46,14 +46,14 @@ fn main() -> io::Result<()> {
 // 受け取った参照を構造体の値としてセットしreturnしている
 // 'aにより、引数のライフタイム = スコープがGrepConfgのqueryやfilenameと同じであることを保証している
 // argsが先にスコープ外になった場合、argsの中の要素もドロップされ、queryやfilenameがダングリング参照になる
-fn parse_confg<'a>(args: &'a Vec<String>) -> GrepConfg<'a> {
+fn parse_confg(args: Vec<String>) -> GrepConfg {
     GrepConfg {
-        query: &args[1],
-        filename: &args[2]
+        query: args[1].clone(),
+        filename: args[2].clone()
     }
 }
 
-struct GrepConfg<'a> {
-    query: &'a str,
-    filename: &'a str
+struct GrepConfg {
+    query: String,
+    filename: String
 }
