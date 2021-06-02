@@ -48,6 +48,10 @@ fn main() -> io::Result<()> {
 // argsが先にスコープ外になった場合、argsの中の要素もドロップされ、queryやfilenameがダングリング参照になる
 fn parse_confg(args: Vec<String>) -> GrepConfg {
     GrepConfg {
+        // .cloneは新しいメモリ領域にコピーを生成するため、
+        // 参照を保持するよりもメモリと時間を食う
+        // ただ、参照を保持する場合ライフタイムの設定が必要なので、
+        // それが無い分コードの見通しは良くなる
         query: args[1].clone(),
         filename: args[2].clone()
     }
