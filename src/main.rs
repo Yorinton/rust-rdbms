@@ -49,6 +49,9 @@ struct GrepConfg {
 
 impl GrepConfg {
     pub fn new(args: Vec<String>) -> Self {
+        if args.len() < 3 {
+            panic!("引数が足りません");
+        }
         GrepConfg {
             // .cloneは新しいメモリ領域にコピーを生成するため、
             // 参照を保持するよりもメモリと時間を食う
