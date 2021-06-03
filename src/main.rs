@@ -3,6 +3,8 @@ use std::io;
 use std::io::prelude::*;
 use std::fs::File;
 use std::io::{BufReader, BufWriter};
+use std::result::Result;
+use std::process;
 
 fn main() -> io::Result<()> {
     // env::args()で、コマンドラインから入力された引数を取得
@@ -12,7 +14,12 @@ fn main() -> io::Result<()> {
     // args()は不正なUnicodeを含んでいた場合panicを起こす
     // 不正なUnicodeを受け入れる必要がある場合は,args_os()を使う
     let args: Vec<String> = env::args().collect();
-    let config: GrepConfg = GrepConfg::new(args);
+    // Resultのunwrap_or_else()でpanic以外の独自エラーが発生した際の処理をクロージャで定義できる
+    let config: GrepConfg = GrepConfg::new(args).unwrap_or_else(|err| {
+        println!("引数解析時に問題発生： {}", err);
+        // non zero codeを指定することでエラーであることを通知
+        process::exit(1);
+    });
 
     let file = File::open(config.filename).expect("file not found");
     let mut buf: String = String::new();
@@ -48,17 +55,20 @@ struct GrepConfg {
 }
 
 impl GrepConfg {
-    pub fn new(args: Vec<String>) -> Self {
+    // この関数内で生成された文字列の参照である&strをreturnする
+    // ライフタイムを指定しないと、スコープを抜けた際にダングリング参照になる可能性がある
+    // 'staticが無いと「この関数の戻り値の型には、ライフタイムが省略された借用値が含まれていますが、ライフタイムは引数から導出できません」というエラーが出る
+    pub fn new(args: Vec<String>) -> Result<GrepConfg, &'static str> {
         if args.len() < 3 {
-            panic!("引数が足りません");
+            return Err("引数が足りません")
         }
-        GrepConfg {
+        Ok(GrepConfg {
             // .cloneは新しいメモリ領域にコピーを生成するため、
             // 参照を保持するよりもメモリと時間を食う
             // ただ、参照を保持する場合ライフタイムの設定が必要なので、
             // それが無い分コードの見通しは良くなる
             query: args[1].clone(),
             filename: args[2].clone()
-        }
+        })
     }
 }
