@@ -21,14 +21,16 @@ fn main() -> io::Result<()> {
         process::exit(1);
     });
 
-    let file = File::open(config.filename).expect("file not found");
-    let mut buf: String = String::new();
-    let mut reader = BufReader::new(file);
+    run(config)
+}
 
+fn run(config: GrepConfg)-> io::Result<()> {
+    let mut reader = create_file_reader(&config.filename);
     // stdout.lock()・・stdoutのロックをloopの前に１度だけ取ることで速度向上
     // BufWriter::new()・・標準出力への書き込みをメモリ内にバッファリングしてI/Oの頻度を抑える
     let stdout = io::stdout();
     let mut out = BufWriter::new(stdout.lock());
+    let mut buf: String = String::new();
     loop {
         let num: usize = reader.read_line(&mut buf)?;
         let res = buf.find(&config.query);
@@ -47,6 +49,11 @@ fn main() -> io::Result<()> {
         }
     }
     Ok(())
+}
+
+fn create_file_reader(filename: &str) -> BufReader<File> {
+    let file = File::open(filename).expect("file not found");
+    BufReader::new(file)
 }
 
 struct GrepConfg {
