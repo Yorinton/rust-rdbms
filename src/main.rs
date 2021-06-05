@@ -29,21 +29,21 @@ fn run(config: GrepConfg)-> io::Result<()> {
     // stdout.lock()・・stdoutのロックをloopの前に１度だけ取ることで速度向上
     // BufWriter::new()・・標準出力への書き込みをメモリ内にバッファリングしてI/Oの頻度を抑える
     let stdout = io::stdout();
-    let mut out = BufWriter::new(stdout.lock());
-    let mut buf: String = String::new();
+    let mut stdout_writer = BufWriter::new(stdout.lock());
+    let mut search_target_text: String = String::new();
     loop {
-        let num: usize = reader.read_line(&mut buf)?;
-        let res = buf.find(&config.query);
+        let num: usize = reader.read_line(&mut search_target_text)?;
+        let res = search_target_text.find(&config.query);
         match res {
             Some(_) => {
-                let replaced_buf: String = buf.replace(&config.query, &format!("\x1b[31m{}\x1b[37m", config.query)).replace("\n", "");
-                writeln!(out, "{}", replaced_buf).unwrap();
+                let display_text: String = search_target_text.replace(&config.query, &format!("\x1b[31m{}\x1b[37m", config.query)).replace("\n", "");
+                writeln!(stdout_writer, "{}", display_text).unwrap();
                 // println!は毎回stdoutのロックを取っているため遅い
                 // println!("{}", replaced_buf);
             },
             None => ()
         }
-        buf.clear();
+        search_target_text.clear();
         if num == 0 {
             break;
         }
