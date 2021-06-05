@@ -5,8 +5,9 @@ use std::fs::File;
 use std::io::{BufReader, BufWriter};
 use std::result::Result;
 use std::process;
+use std::error::Error;
 
-fn main() -> io::Result<()> {
+fn main() {
     // env::args()で、コマンドラインから入力された引数を取得
     // args()で取得できるArgsはIteratorトレイトを実装している
     // .collectでiteratorをcollectionに変換する
@@ -21,10 +22,17 @@ fn main() -> io::Result<()> {
         process::exit(1);
     });
 
-    run(config)
+    // unwrapしたい値を返さないのでunwrap_or_elseではなく、if let構文を使う
+    if let Err(e) = run(config) {
+        println!("検索時エラー: {}", e);
+        process::exit(1);
+    }
 }
 
-fn run(config: GrepConfg)-> io::Result<()> {
+// Box<dyn Error>はトレイトオブジェクト
+// Errorトレイトを実装しているオブジェクトであればなんでも返せるため、
+// エラー時の戻り値を柔軟に出来る
+fn run(config: GrepConfg)-> Result<(), Box<dyn Error>> {
     let mut reader = create_file_reader(&config.filename);
     // stdout.lock()・・stdoutのロックをloopの前に１度だけ取ることで速度向上
     // BufWriter::new()・・標準出力への書き込みをメモリ内にバッファリングしてI/Oの頻度を抑える
@@ -37,7 +45,7 @@ fn run(config: GrepConfg)-> io::Result<()> {
         match res {
             Some(_) => {
                 let display_text: String = search_target_text.replace(&config.query, &format!("\x1b[31m{}\x1b[37m", config.query)).replace("\n", "");
-                writeln!(stdout_writer, "{}", display_text).unwrap();
+                writeln!(stdout_writer, "{}", display_text)?;
                 // println!は毎回stdoutのロックを取っているため遅い
                 // println!("{}", replaced_buf);
             },
