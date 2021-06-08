@@ -20,7 +20,7 @@ fn main() {
     });
 
     // unwrapしたい値を返さないのでunwrap_or_elseではなく、if let構文を使う
-    if let Err(e) = lib::run(config) {
+    if let Err(e) = lib::run_read_all(config) {
         println!("検索時エラー: {}", e);
         process::exit(1);
     }
