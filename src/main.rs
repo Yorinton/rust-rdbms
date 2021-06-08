@@ -19,9 +19,19 @@ fn main() {
         process::exit(1);
     });
 
-    // unwrapしたい値を返さないのでunwrap_or_elseではなく、if let構文を使う
-    if let Err(e) = lib::run_read_all(config) {
-        println!("検索時エラー: {}", e);
-        process::exit(1);
+    let is_sensitive: bool = env::var("IS_INSENSITIVE").is_err();
+
+    if is_sensitive == true {
+        // unwrapしたい値を返さないのでunwrap_or_elseではなく、if let構文を使う
+        if let Err(e) = lib::run_read_buf(config) {
+            println!("検索時エラー: {}", e);
+            process::exit(1);
+        }
+    } else {
+        // unwrapしたい値を返さないのでunwrap_or_elseではなく、if let構文を使う
+        if let Err(e) = lib::run_read_all(config) {
+            println!("検索時エラー: {}", e);
+            process::exit(1);
+        }
     }
 }

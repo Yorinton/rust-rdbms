@@ -51,9 +51,12 @@ pub fn run_read_all(config: GrepConfg)-> Result<(), Box<dyn Error>> {
 
 pub fn search(query: &str, contents: &str) -> Vec<String> {
     let mut results = Vec::new();
-
+    // 検索文字列と検索対象を共に小文字に統一してから検索
+    let query = query.to_lowercase();
     for line in contents.lines() {
-        if line.contains(query) {
+        // to_lowercaseは新しいStringを生成し返す
+        // lineはto_lowercaseに借用される
+        if line.to_lowercase().contains(&query) {
             results.push(line.replace(&query, &format!("\x1b[31m{}\x1b[37m", query)).replace("\n", ""));
         }
     }
