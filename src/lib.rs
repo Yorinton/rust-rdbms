@@ -8,6 +8,7 @@ use std::error::Error;
 // Box<dyn Error>はトレイトオブジェクト
 // Errorトレイトを実装しているオブジェクトであればなんでも返せるため、
 // エラー時の戻り値を柔軟に出来る
+#[allow(dead_code)]
 pub fn run_read_buf(config: GrepConfg)-> Result<(), Box<dyn Error>> {
     let mut reader = create_file_reader(&config.filename);
     // stdout.lock()・・stdoutのロックをloopの前に１度だけ取ることで速度向上
@@ -48,7 +49,7 @@ pub fn run_read_all(config: GrepConfg)-> Result<(), Box<dyn Error>> {
     Ok(())
 }
 
-pub fn search<'a>(query: &str, contents: &'a str) -> Vec<String> {
+pub fn search(query: &str, contents: &str) -> Vec<String> {
     let mut results = Vec::new();
 
     for line in contents.lines() {
@@ -60,6 +61,7 @@ pub fn search<'a>(query: &str, contents: &'a str) -> Vec<String> {
     results
 }
 
+#[allow(dead_code)]
 fn create_file_reader(filename: &str) -> BufReader<File> {
     let file = File::open(filename).expect("file not found");
     BufReader::new(file)
