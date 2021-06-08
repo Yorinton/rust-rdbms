@@ -19,6 +19,8 @@ fn main() {
         process::exit(1);
     });
 
+    // env::var()はResultを返すが、.is_err()でbool値に変換している
+    // 環境変数が設定されていなければ.is_err()はtrueを、設定されていればfalseを返す
     let is_sensitive: bool = env::var("IS_INSENSITIVE").is_err();
 
     if is_sensitive == true {
