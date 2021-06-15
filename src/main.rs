@@ -22,6 +22,9 @@ fn generate_workout(intensity: u32, random_number: u32) {
         num
     };
 
+    // 本体が１つの式のみからなる場合、{}は不要
+    let shortest_closure = |x| x + 1;
+
     if intensity < 25 {
         println!(
             "Today, do {} pushups!",
