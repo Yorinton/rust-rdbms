@@ -24,12 +24,25 @@ fn generate_workout(intensity: u32, random_number: u32) {
         thread::sleep(Duration::from_secs(2));
         num
     };
+
+    struct Cacher<T: Fn(u32) -> u32> {
+        calculation: T, // クロージャ
+        value: Option<u32>, // クロージャの実行結果 クロージャが一度でも実行されたら値がセットされる
+    }
+    // struct Cacher<T>
+    //     where T: Fn(u32) -> u32
+    // {
+    //     calculation: T,
+    //     value: Option<u32>,
+    // }
+
     // 最初に呼び出されるタイミングで型推論が行われる
     // それ以降に呼び出された場合、最初に推論した型と異なっていた場合はコンパイルエラーになる
     // expensive_closure(String::from("あああ"));
 
     // 本体が１つの式のみからなる場合、{}は不要
     let shortest_closure = |x| x + 1;
+    shortest_closure(2);
 
     if intensity < 25 {
         println!(
