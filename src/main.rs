@@ -13,7 +13,10 @@ fn main() {
 
 fn generate_workout(intensity: u32, random_number: u32) {
     // クロージャ
-    let expensive_closure = |num: u32| -> u32 {
+    // クロージャは型注釈がなくてもコンパイルが通る
+    // 通常クロージャは小さいスコープの中で使用される + インターフェースを公開する必要がない + あらゆる任意の文脈ではなく狭い文脈でのみ関係する、ため
+    // 明示性のために型注釈することも可能
+    let expensive_closure = |num| {
         println!("calculating slowly...");
         thread::sleep(Duration::from_secs(2));
         num
