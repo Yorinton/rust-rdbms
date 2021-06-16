@@ -25,17 +25,6 @@ fn generate_workout(intensity: u32, random_number: u32) {
         num
     };
 
-    struct Cacher<T: Fn(u32) -> u32> {
-        calculation: T, // クロージャ
-        value: Option<u32>, // クロージャの実行結果 クロージャが一度でも実行されたら値がセットされる
-    }
-    // struct Cacher<T>
-    //     where T: Fn(u32) -> u32
-    // {
-    //     calculation: T,
-    //     value: Option<u32>,
-    // }
-
     // 最初に呼び出されるタイミングで型推論が行われる
     // それ以降に呼び出された場合、最初に推論した型と異なっていた場合はコンパイルエラーになる
     // expensive_closure(String::from("あああ"));
@@ -62,6 +51,43 @@ fn generate_workout(intensity: u32, random_number: u32) {
                 "Today, run for {} minutes!",
                 expensive_closure(intensity)
             )
+        }
+    }
+}
+
+struct Cacher<T: Fn(u32) -> u32> {
+    calculation: T, // クロージャ
+    value: Option<u32>, // クロージャの実行結果 クロージャが一度でも実行されたら値がセットされる
+}
+// struct Cacher<T>
+//     where T: Fn(u32) -> u32
+// {
+//     calculation: T,
+//     value: Option<u32>,
+// }
+
+impl<T> Cacher<T>
+    where T: Fn(u32) -> u32
+{
+    fn new(calculation: T) -> Self {
+        Cacher {
+            calculation,
+            value: None
+        }
+    }
+
+    fn value(&mut self, arg: u32) -> u32 {
+        // valueに値が設定されている場合はその値を、
+        // 設定されてない場合はcalculationの実行結果をvalueに設定した上で返す
+        match self.value {
+            Some(v) => v,
+            None => {
+                // オブジェクトのフィールドに設定されたクロージャは、
+                // ()で囲うことで実行できる
+                let v = (self.calculation)(arg);
+                self.value = Some(v);
+                v
+            }
         }
     }
 }
