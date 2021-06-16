@@ -19,11 +19,11 @@ fn generate_workout(intensity: u32, random_number: u32) {
     // クロージャは型注釈がなくてもコンパイルが通る
     // 通常クロージャは小さいスコープの中で使用される + インターフェースを公開する必要がない + あらゆる任意の文脈ではなく狭い文脈でのみ関係する、ため
     // 明示性のために型注釈することも可能
-    let expensive_closure = |num| {
+    let mut expensive_result = Cacher::new(|num| {
         println!("calculating slowly...");
         thread::sleep(Duration::from_secs(2));
         num
-    };
+    });
 
     // 最初に呼び出されるタイミングで型推論が行われる
     // それ以降に呼び出された場合、最初に推論した型と異なっていた場合はコンパイルエラーになる
@@ -36,12 +36,12 @@ fn generate_workout(intensity: u32, random_number: u32) {
     if intensity < 25 {
         println!(
             "Today, do {} pushups!",
-            expensive_closure(intensity)
+            expensive_result.value(intensity)
         );
         println!(
             // 次に、{}回腹筋をしてください！
             "Next, do {} situps!",
-            expensive_closure(intensity)
+            expensive_result.value(intensity)
         );
     } else {
         if random_number == 3 {
@@ -49,7 +49,7 @@ fn generate_workout(intensity: u32, random_number: u32) {
         } else {
             println!(
                 "Today, run for {} minutes!",
-                expensive_closure(intensity)
+                expensive_result.value(intensity)
             )
         }
     }
