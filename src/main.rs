@@ -1,5 +1,6 @@
 use std::thread;
 use std::time::Duration;
+use std::collections::HashMap;
 
 fn main() {
     let simulated_user_specified_value = 10;
@@ -57,7 +58,7 @@ fn generate_workout(intensity: u32, random_number: u32) {
 
 struct Cacher<T: Fn(u32) -> u32> {
     calculation: T, // クロージャ
-    value: Option<u32>, // クロージャの実行結果 クロージャが一度でも実行されたら値がセットされる
+    value: HashMap<u32, u32>, // クロージャの実行結果 クロージャが一度でも実行されたら値がセットされる
 }
 // struct Cacher<T>
 //     where T: Fn(u32) -> u32
@@ -72,22 +73,30 @@ impl<T> Cacher<T>
     fn new(calculation: T) -> Self {
         Cacher {
             calculation,
-            value: None
+            value: HashMap::new()
         }
     }
 
-    fn value(&mut self, arg: u32) -> u32 {
+    fn value(&mut self, key: u32) -> u32 {
         // valueに値が設定されている場合はその値を、
         // 設定されてない場合はcalculationの実行結果をvalueに設定した上で返す
-        match self.value {
-            Some(v) => v,
+        match self.value.get(&key) {
+            Some(val) => *val,
             None => {
-                // オブジェクトのフィールドに設定されたクロージャは、
-                // ()で囲うことで実行できる
-                let v = (self.calculation)(arg);
-                self.value = Some(v);
-                v
+                let calculated = (self.calculation)(key);
+                self.value.insert(key, calculated);
+                calculated
             }
         }
     }
+}
+
+#[test]
+fn call_with_different_values() {
+    let mut closure_result = Cacher::new(|n| n * n);
+    let v = closure_result.value(3);
+    let v2 = closure_result.value(4);
+
+    assert_eq!(v, 9);
+    assert_eq!(v2, 16);
 }
