@@ -112,9 +112,10 @@ fn call_with_different_values() {
 #[test]
 fn call_with_strings() {
     let mut closure_result = Cacher::new(|n: &str| -> String {
-        let mut m = n.to_string();
-        m.push_str("でがんす");
-        m
+        let m = n.to_string();
+        // m.push_str("でがんす");
+        // m
+        m + "でがんす"
     });
     let v = closure_result.value("こんにちわ");
     let v2 = closure_result.value("こんばんわ");
