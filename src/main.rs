@@ -1,3 +1,4 @@
+use std::hash::Hash;
 use std::thread;
 use std::time::Duration;
 use std::collections::HashMap;
@@ -37,12 +38,12 @@ fn generate_workout(intensity: u32, random_number: u32) {
     if intensity < 25 {
         println!(
             "Today, do {} pushups!",
-            expensive_result.value(intensity)
+            expensive_result.value(&intensity)
         );
         println!(
             // 次に、{}回腹筋をしてください！
             "Next, do {} situps!",
-            expensive_result.value(intensity)
+            expensive_result.value(&intensity)
         );
     } else {
         if random_number == 3 {
@@ -50,15 +51,15 @@ fn generate_workout(intensity: u32, random_number: u32) {
         } else {
             println!(
                 "Today, run for {} minutes!",
-                expensive_result.value(intensity)
+                expensive_result.value(&intensity)
             )
         }
     }
 }
 
-struct Cacher<T: Fn(u32) -> u32> {
-    calculation: T, // クロージャ
-    value: HashMap<u32, u32>, // クロージャの実行結果 クロージャが一度でも実行されたら値がセットされる
+struct Cacher<K, V, F> {
+    calculation: F, // クロージャ
+    value: HashMap<K, V>, // クロージャの実行結果 クロージャが一度でも実行されたら値がセットされる
 }
 // struct Cacher<T>
 //     where T: Fn(u32) -> u32
@@ -67,25 +68,29 @@ struct Cacher<T: Fn(u32) -> u32> {
 //     value: Option<u32>,
 // }
 
-impl<T> Cacher<T>
-    where T: Fn(u32) -> u32
+impl<K, V, F> Cacher<K, V, F>
+    where K: Hash + Eq + Copy,
+          V: Clone,
+          F: Fn(K) -> V
 {
-    fn new(calculation: T) -> Self {
+    fn new(calculation: F) -> Self {
         Cacher {
             calculation,
             value: HashMap::new()
         }
     }
 
-    fn value(&mut self, key: u32) -> u32 {
+    fn value(&mut self, arg: K) -> V {
         // valueに値が設定されている場合はその値を、
         // 設定されてない場合はcalculationの実行結果をvalueに設定した上で返す
-        match self.value.get(&key) {
-            Some(val) => *val,
+        match self.value.get(&arg) {
+            // HashMapに保持されたVをcloneして返す
+            Some(val) => val.clone(),
             None => {
-                let calculated = (self.calculation)(key);
-                self.value.insert(key, calculated);
-                calculated
+                let calculated = (self.calculation)(arg);
+                let v = self.value.entry(arg).or_insert(calculated);
+                // HashMapに保持されたVのcloneを返す
+                v.clone()
             }
         }
     }
@@ -99,4 +104,18 @@ fn call_with_different_values() {
 
     assert_eq!(v, 9);
     assert_eq!(v2, 16);
+}
+
+#[test]
+fn call_with_strings() {
+    let mut closure_result = Cacher::new(|n: &str| -> String {
+        let mut m = n.to_string();
+        m.push_str("でがんす");
+        m
+    });
+    let v = closure_result.value("こんにちわ");
+    let v2 = closure_result.value("こんばんわ");
+
+    assert_eq!(v, "こんにちわでがんす");
+    assert_eq!(v2, "こんばんわでがんす");
 }
