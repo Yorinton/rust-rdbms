@@ -119,3 +119,12 @@ fn call_with_strings() {
     assert_eq!(v, "こんにちわでがんす");
     assert_eq!(v2, "こんばんわでがんす");
 }
+
+#[test]
+fn call_with_slice() {
+    let mut closure_result = Cacher::new(|n: &str| -> usize {
+        n.len()
+    });
+    let res = closure_result.value("abcd");
+    assert_eq!(res, 4);
+}
