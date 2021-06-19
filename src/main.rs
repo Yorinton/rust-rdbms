@@ -91,6 +91,9 @@ impl<K, V, F> Cacher<K, V, F>
                 let v = self.value.entry(arg).or_insert(calculated);
                 // HashMapに保持されたVのcloneを返す
                 v.clone()
+                // or_insertではなく、self.valueにinsertして、値を再度getした上でcloneを返す方法
+                // self.value.insert(arg, calculated);
+                // self.value.get(&arg).unwrap().clone()
             }
         }
     }
