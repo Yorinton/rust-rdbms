@@ -11,6 +11,18 @@ pub fn vec_iter() {
     // println!("{:?}", v1_iter);
 }
 
+pub fn vec_iter_next() {
+    let v1 = vec![10,20,30];
+
+    // nextメソッドを呼び出す際は、イテレータは可変である必要がある
+    // nextによって今シーケンスのどこにいるのかを追いかけるため、内部の状態を変更する必要があるため
+    // forループを使う場合は、forがイテレータの所有権を奪って裏で内部状態を変更する
+    let mut v1_iter = v1.iter();
+    println!("{}", v1_iter.next().unwrap());
+    println!("{}", v1_iter.next().unwrap());
+    println!("{}", v1_iter.next().unwrap());
+}
+
 pub fn hash_map_iter() {
     let mut h = HashMap::new();
     h.insert(String::from("福岡"), String::from("ラーメン"));

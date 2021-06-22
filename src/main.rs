@@ -103,6 +103,7 @@ impl<K, V, F> Cacher<K, V, F>
 #[test]
 fn test_vec_iter() {
     iter::vec_iter();
+    iter::vec_iter_next();
     iter::hash_map_iter();
     iter::hash_map_iter_mut();
 }
