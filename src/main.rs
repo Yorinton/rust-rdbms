@@ -101,8 +101,9 @@ impl<K, V, F> Cacher<K, V, F>
 }
 
 #[test]
-fn test_org_iter() {
-    iter::org_iter();
+fn test_vec_iter() {
+    iter::vec_iter();
+    iter::hash_map_iter();
 }
 
 
