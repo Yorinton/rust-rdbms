@@ -3,9 +3,12 @@ use std::collections::HashMap;
 pub fn vec_iter() {
     let v1 = vec![10,20,30];
     let v1_iter = v1.iter();
+    // forループがv1_iterの所有権を奪っている
     for val in v1_iter {
         println!("{}", val);
     }
+    // 所有権が奪われているため、以下でv1_iterは使えない
+    // println!("{:?}", v1_iter);
 }
 
 pub fn hash_map_iter() {
