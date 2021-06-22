@@ -48,3 +48,21 @@ pub fn hash_map_iter_mut() {
         println!("{}の名産は{}", key, val);
     }
 }
+
+pub fn create_hash_map_by_map() {
+    // mapを使ってRangeからHashMapを生成
+    let hmap: HashMap<i32, i32> = (0..3).map(|k| (k, k*2)).collect();
+    // HashMapを直接ループ処理した場合と、HashMapのイテレータをループ処理した場合、
+    // 処理順序が異なる
+    // HashMapを直接ループ処理した場合は、ハッシュ値の生成にランダム性があるので順番が毎回異なるのは分かる
+    // @TODO：イテレータをループ処理した場合は要調査
+    for (k,v) in hmap.iter() {
+        println!("key：{}, val：{}", k, v);
+    }
+
+    // Rangeに対するループ処理
+    // Rangeはstd::iter::Iteratorトレイトを実装している
+    for v in 0..3 {
+        println!("{}",v);
+    }
+}
