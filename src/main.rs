@@ -2,6 +2,7 @@ use std::hash::Hash;
 use std::thread;
 use std::time::Duration;
 use std::collections::HashMap;
+mod iter;
 
 fn main() {
     let simulated_user_specified_value = 10;
@@ -98,6 +99,12 @@ impl<K, V, F> Cacher<K, V, F>
         }
     }
 }
+
+#[test]
+fn test_org_iter() {
+    iter::org_iter();
+}
+
 
 #[test]
 fn call_with_different_values() {
