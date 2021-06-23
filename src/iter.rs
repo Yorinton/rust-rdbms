@@ -75,3 +75,23 @@ pub fn iter_sum() {
     let sum: i32 = v_iter.sum();
     println!("{}", sum);
 }
+
+pub fn hash_map_values() {
+    let mut h = HashMap::new();
+    h.insert(String::from("福岡"), 130);
+    h.insert(String::from("長崎"), 95);
+
+    // .valuesはHashMapの値だけのイテレータを返す
+    // for文でループ処理する際に値のみ抽出される
+    // .valuesの場合、イテレータの各値への不変参照を返す
+    // (unstableだが、into_values()の場合は、各値の所有権を奪う)
+    let vals = h.values();
+    let sum: i32 = vals.sum();
+    println!("{}", sum);
+
+    // .into_iter()の場合、イテレータの各値の所有権を奪う
+    let nums = h.into_iter();
+    for (k, v) in nums {
+        println!("key：{}, val：{}", k, v);
+    }
+}

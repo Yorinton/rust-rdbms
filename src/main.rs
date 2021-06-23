@@ -111,6 +111,7 @@ fn test_hash_map_iter() {
     iter::hash_map_iter();
     iter::hash_map_iter_mut();
     iter::create_hash_map_by_map();
+    iter::hash_map_values();
 }
 
 #[test]
