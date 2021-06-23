@@ -66,3 +66,12 @@ pub fn create_hash_map_by_map() {
         println!("{}",v);
     }
 }
+
+pub fn iter_sum() {
+    let v = vec![10,20,30];
+    let v_iter = v.iter();
+
+    // sum()はv_iter所有権を奪う
+    let sum: i32 = v_iter.sum();
+    println!("{}", sum);
+}
