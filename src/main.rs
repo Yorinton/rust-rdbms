@@ -120,6 +120,11 @@ fn test_iter_sum() {
 }
 
 #[test]
+fn test_iter_map() {
+    iter::iter_map();
+}
+
+#[test]
 fn call_with_different_values() {
     let mut closure_result = Cacher::new(|n| n * n);
     let v = closure_result.value(3);

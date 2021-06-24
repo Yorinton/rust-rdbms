@@ -95,3 +95,13 @@ pub fn hash_map_values() {
         println!("key：{}, val：{}", k, v);
     }
 }
+
+pub fn iter_map() {
+    let v = vec![1,4,20];
+    // map()はクロージャの処理を適用した新たなイテレータを返す
+    // イテレータはlazy loadなので使用されるまで何もしない
+    let v_map = v.iter().map(|x| (x + 4) * 2);
+    // collect()で.map()で生成したイテレータを使用してvectorを返す
+    let v_map_collection: Vec<i32> = v_map.collect();
+    println!("{:?}", v_map_collection);
+}
