@@ -108,7 +108,7 @@ pub fn iter_map() {
 
 pub fn iter_filter() {
     let v = vec![1,2,3,4,5,6];
-    let v_filtered = v.iter().filter(|x| *x % 2 == 0);
-    let v_filtered_collection: Vec<&i32> = v_filtered.collect();
+    let v_filtered = v.into_iter().filter(|x| *x % 2 == 0);
+    let v_filtered_collection: Vec<i32> = v_filtered.collect();
     println!("{:?}", v_filtered_collection);
 }
