@@ -125,6 +125,11 @@ fn test_iter_map() {
 }
 
 #[test]
+fn test_iter_filter() {
+    iter::iter_filter();
+}
+
+#[test]
 fn call_with_different_values() {
     let mut closure_result = Cacher::new(|n| n * n);
     let v = closure_result.value(3);

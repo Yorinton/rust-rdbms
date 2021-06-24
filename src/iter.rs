@@ -105,3 +105,10 @@ pub fn iter_map() {
     let v_map_collection: Vec<i32> = v_map.collect();
     println!("{:?}", v_map_collection);
 }
+
+pub fn iter_filter() {
+    let v = vec![1,2,3,4,5,6];
+    let v_filtered = v.iter().filter(|x| *x % 2 == 0);
+    let v_filtered_collection: Vec<&i32> = v_filtered.collect();
+    println!("{:?}", v_filtered_collection);
+}
