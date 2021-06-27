@@ -3,6 +3,7 @@ use std::thread;
 use std::time::Duration;
 use std::collections::HashMap;
 mod iter;
+use iter::Shoe;
 
 fn main() {
     let simulated_user_specified_value = 10;
@@ -127,6 +128,18 @@ fn test_iter_map() {
 #[test]
 fn test_iter_filter() {
     iter::iter_filter();
+}
+
+#[test]
+fn test_filter_struct() {
+    let shoes = vec![
+        Shoe::new(22, String::from("スニーカー")),
+        Shoe::new(23, String::from("サンダル")),
+        Shoe::new(24, String::from("ブーツ")),
+        Shoe::new(33, String::from("革靴")),
+    ];
+    let my_shoes = iter::shoes_in_my_size(shoes, 24);
+    println!("{:?}", my_shoes);
 }
 
 #[test]

@@ -114,3 +114,22 @@ pub fn iter_filter() {
     let v_filtered_collection: Vec<i32> = v_filtered.collect();
     println!("{:?}", v_filtered_collection);
 }
+
+#[derive(Debug)]
+pub struct Shoe {
+    size: u32,
+    style: String
+}
+
+impl Shoe {
+    pub fn new(size: u32, style: String) -> Self {
+        Shoe {
+            size,
+            style
+        }
+    }
+}
+
+pub fn shoes_in_my_size(shoes: Vec<Shoe>, size: u32) -> Vec<Shoe> {
+    shoes.into_iter().filter(|shoe| shoe.size == size).collect()
+}
