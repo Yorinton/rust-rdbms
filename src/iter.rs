@@ -115,21 +115,65 @@ pub fn iter_filter() {
     println!("{:?}", v_filtered_collection);
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct Shoe {
     size: u32,
-    style: String
+    style: String,
 }
 
 impl Shoe {
     pub fn new(size: u32, style: String) -> Self {
         Shoe {
             size,
-            style
+            style,
+        }
+    }
+}
+
+pub struct ShoeCounter {
+    shoes: Vec<Shoe>,
+    counted_shoes: Vec<Shoe>,
+    shoe_num: u32
+}
+
+impl ShoeCounter {
+    pub fn new(shoes: Vec<Shoe>) -> Self {
+        ShoeCounter {
+            shoes,
+            counted_shoes: vec![],
+            shoe_num: 0
+        }
+    }
+
+    pub fn get_counted(&self) -> &Vec<Shoe> {
+        &self.counted_shoes
+    }
+}
+
+impl Iterator for ShoeCounter {
+    type Item = Shoe;
+
+    fn next(&mut self) -> Option<Self::Item> {
+        let current = self.shoes.pop();
+        match current {
+            Some(c) => {
+                self.shoe_num += 1;
+                self.counted_shoes.push(c.clone());
+                Some(c)
+            },
+            None => None
         }
     }
 }
 
 pub fn shoes_in_my_size(shoes: Vec<Shoe>, size: u32) -> Vec<Shoe> {
     shoes.into_iter().filter(|shoe| shoe.size == size).collect()
+}
+
+pub fn shoe_count(shoe_counter: &mut ShoeCounter) {
+    println!("{:?}", shoe_counter.next());
+    println!("{:?}", shoe_counter.next());
+    println!("{:?}", shoe_counter.next());
+    println!("{:?}", shoe_counter.get_counted().len());
+    println!("{:?}", shoe_counter.next());
 }

@@ -5,6 +5,8 @@ use std::collections::HashMap;
 mod iter;
 use iter::Shoe;
 
+use crate::iter::ShoeCounter;
+
 fn main() {
     let simulated_user_specified_value = 10;
     let simulated_random_number = 7;
@@ -140,6 +142,18 @@ fn test_filter_struct() {
     ];
     let my_shoes = iter::shoes_in_my_size(shoes, 24);
     println!("{:?}", my_shoes);
+}
+
+#[test]
+fn test_shoe_count() {
+    let shoes = vec![
+        Shoe::new(22, String::from("スニーカー")),
+        Shoe::new(23, String::from("サンダル")),
+        Shoe::new(24, String::from("ブーツ")),
+        Shoe::new(33, String::from("革靴")),
+    ];
+    let mut shoe_counter = ShoeCounter::new(shoes);
+    iter::shoe_count(&mut shoe_counter);
 }
 
 #[test]
