@@ -92,8 +92,11 @@ fn search(query: &str, contents: &str) -> Vec<String> {
     // lines()が返すLinesはIteratorトレイトを実装しているため、
     // filterやmapなどIteratorのメソッドが使える
     contents.lines()
+        // queryを含む行にフィルタ
         .filter(|line| line.to_lowercase().contains(&query))
+        // 各行でqueryに該当する文字列の色を変更
         .map(|line| line.replace(&query, &format!("\x1b[31m{}\x1b[37m", query)).replace("\n", ""))
+        // ベクタに変換してreturn
         .collect()
 }
 
