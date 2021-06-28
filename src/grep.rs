@@ -1,4 +1,5 @@
 use std::env;
+use std::env::Args;
 use std::process;
 use std::io;
 use std::io::prelude::*;
@@ -14,9 +15,9 @@ pub fn grep_fast() {
     // .collectの戻り値はFromIteratorトレイトを実装している必要がある(Vec<T>はFromIteratorを実装している=iteratorから変換可能)
     // args()は不正なUnicodeを含んでいた場合panicを起こす
     // 不正なUnicodeを受け入れる必要がある場合は,args_os()を使う
-    let args: Vec<String> = env::args().collect();
+    let mut args = env::args();
     // Resultのunwrap_or_else()でpanic以外の独自エラーが発生した際の処理をクロージャで定義できる
-    let config: GrepConfg = GrepConfg::new(args).unwrap_or_else(|err| {
+    let config: GrepConfg = GrepConfg::new(&mut args).unwrap_or_else(|err| {
         eprintln!("引数解析時に問題発生： {}", err);
         // non zero codeを指定することでエラーであることを通知
         process::exit(1);
@@ -115,17 +116,29 @@ impl GrepConfg {
     // この関数内で生成された文字列の参照である&strをreturnする
     // ライフタイムを指定しないと、スコープを抜けた際にダングリング参照になる可能性がある
     // 'staticが無いと「この関数の戻り値の型には、ライフタイムが省略された借用値が含まれていますが、ライフタイムは引数から導出できません」というエラーが出る
-    pub fn new(args: Vec<String>) -> Result<GrepConfg, &'static str> {
+    pub fn new(args: &mut Args) -> Result<GrepConfg, &'static str> {
         if args.len() < 3 {
             return Err("引数が足りません")
         }
+        args.next();
+        // イテレータArgsに対して.next()を使う場合、内部的に状態を保持して変更するため、
+        // mutableにする必要がある
+        let query = match args.next() {
+            Some(arg) => arg.to_string(),
+            None => return Err("Didn't get a query string"),
+        };
+        let filename = match args.next() {
+            Some(arg) => arg.to_string(),
+            None => return Err("Didn't get a query string"),
+        };
+
         Ok(GrepConfg {
             // .cloneは新しいメモリ領域にコピーを生成するため、
             // 参照を保持するよりもメモリと時間を食う
             // ただ、参照を保持する場合ライフタイムの設定が必要なので、
             // それが無い分コードの見通しは良くなる
-            query: args[1].clone(),
-            filename: args[2].clone()
+            query,
+            filename
         })
     }
 }
