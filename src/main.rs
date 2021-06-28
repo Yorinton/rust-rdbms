@@ -5,12 +5,8 @@ use std::collections::HashMap;
 mod iter;
 use iter::Shoe;
 use crate::iter::ShoeCounter;
-mod grep;
-
 
 fn main() {
-    grep::grep_fast();
-
     let simulated_user_specified_value = 10;
     let simulated_random_number = 7;
 
@@ -191,9 +187,4 @@ fn call_with_slice() {
     });
     let res = closure_result.value("abcd");
     assert_eq!(res, 4);
-}
-
-#[test]
-fn test_grep() {
-    grep::grep_fast();
 }
