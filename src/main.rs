@@ -19,7 +19,15 @@ fn main() {
     );
 }
 
-fn generate_workout(intensity: u32, random_number: u32) {
+/// workoutを生成
+/// # Examples
+///
+/// ```
+/// let intensity = 4;
+/// let random_number = 22;
+/// assert_eq!(4, generate_workout(4, 22));
+/// ```
+pub fn generate_workout(intensity: u32, random_number: u32) -> u32 {
     // クロージャ
     // クロージャは型注釈がなくてもコンパイルが通る
     // 通常クロージャは小さいスコープの中で使用される + インターフェースを公開する必要がない + あらゆる任意の文脈ではなく狭い文脈でのみ関係する、ため
@@ -48,6 +56,7 @@ fn generate_workout(intensity: u32, random_number: u32) {
             "Next, do {} situps!",
             expensive_result.value(&intensity)
         );
+        *expensive_result.value(&intensity)
     } else {
         if random_number == 3 {
             println!("Take a break today! Remember to stay hydrated!");
@@ -57,6 +66,7 @@ fn generate_workout(intensity: u32, random_number: u32) {
                 expensive_result.value(&intensity)
             )
         }
+        *expensive_result.value(&intensity)
     }
 }
 

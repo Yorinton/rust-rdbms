@@ -86,6 +86,18 @@ fn run_read_all(config: GrepConfg)-> Result<(), Box<dyn Error>> {
     Ok(())
 }
 
+/// 与えられた検索文字列が含まれる行を返す
+/// 検索文字列は色付けする
+/// 大文字・小文字は区別しない
+///
+/// # Examples
+///
+/// ```
+/// let query = "hello";
+/// let contents = "hello every one.\n My name is Yori.\n It's over.\n Hello!";
+/// let result = grep::search(query, contents);
+/// assert_eq!(2, result.len());
+/// ```
 fn search(query: &str, contents: &str) -> Vec<String> {
     // 検索文字列と検索対象を共に小文字に統一してから検索
     let query = query.to_lowercase();
@@ -100,6 +112,10 @@ fn search(query: &str, contents: &str) -> Vec<String> {
         .collect()
 }
 
+/// ファイルリーダーを生成する関数
+/// 
+/// # Panics
+/// 指定したファイル名に該当するファイルが存在しない場合パニックを起こします
 #[allow(dead_code)]
 fn create_file_reader(filename: &str) -> BufReader<File> {
     let file = File::open(filename).expect("file not found");
