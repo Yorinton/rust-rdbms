@@ -17,3 +17,7 @@ path = "src/main.rs"
 [[bin]]
 name = "grep"
 path = "src/main_grep.rs"
+
+[[bin]]
+name = "parallel"
+path = "src/main_parallel.rs"
