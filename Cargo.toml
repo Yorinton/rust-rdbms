@@ -21,3 +21,7 @@ path = "src/main_grep.rs"
 [[bin]]
 name = "parallel"
 path = "src/main_parallel.rs"
+
+[[bin]]
+name = "channel"
+path = "src/main_parallel_channel.rs"
